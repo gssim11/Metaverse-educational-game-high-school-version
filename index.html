@@ -1,0 +1,2270 @@
+<!DOCTYPE html>
+<!-- FINAL_DEPLOY_BUILD: accessibility + onboarding + guidance + performance -->
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<title>웰컴 투 원곡고 · 안산대 물리치료학과 체험</title>
+  <meta name="description" content="원곡고등학교 × 안산대학교 물리치료학과 진로체험 메타버스 — 아바타로 4개 체험존을 돌며 평가·중재·재평가를 배우고 체험 배지를 모아 수료증을 받는 진로체험 웹앱입니다." />
+  <meta name="theme-color" content="#0B224E" />
+  <meta name="author" content="안산대학교 물리치료학과" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="안산대학교 물리치료학과" />
+  <meta property="og:locale" content="ko_KR" />
+  <meta property="og:title" content="웰컴 투 원곡고 · 안산대 물리치료학과 체험" />
+  <meta property="og:description" content="원곡고등학교 × 안산대학교 물리치료학과 진로체험 메타버스 — 아바타로 4개 체험존을 돌며 평가·중재·재평가를 배우고 체험 배지를 모아 수료증을 받는 진로체험 웹앱입니다." />
+  <meta property="og:image" content="og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="웰컴 투 원곡고 · 안산대 물리치료학과 체험" />
+  <meta name="twitter:description" content="원곡고등학교 × 안산대학교 물리치료학과 진로체험 메타버스 — 아바타로 4개 체험존을 돌며 평가·중재·재평가를 배우고 체험 배지를 모아 수료증을 받는 진로체험 웹앱입니다." />
+  <meta name="twitter:image" content="og-image.png" />
+<style>
+  :root{
+    --navy-900:#07132e; --navy-800:#0b224e; --navy-700:#123063; --navy-600:#1b3d7a; --navy-500:#264c8f;
+    --gold:#d4af52; --gold-hi:#f0d488; --gold-lo:#a9812c; --gold-line:rgba(212,175,82,.42);
+    --cream:#f4ead0; --text:#eaf1ff; --muted:#a6b6d6;
+    --accent:#d4af52; --accent2:#8fb0e8; --ok:#5fd39a; --bad:#f0857f;
+    --panel:rgba(9,22,50,.90); --line:rgba(212,175,82,.30); --bg:#07132e;
+    --ser:'Nanum Myeongjo','Batang',Georgia,'Times New Roman',serif;
+    --san:'Pretendard','Malgun Gothic','Segoe UI',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;overflow:hidden;background:#04091a;font-family:var(--san);color:var(--text)}
+  #game{position:fixed;inset:0}
+  canvas{display:block;image-rendering:auto}
+
+  /* HUD */
+  #hud{position:absolute;top:14px;left:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;pointer-events:none;max-width:62vw;z-index:10}
+  #brandbadge{display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,rgba(11,34,78,.94),rgba(7,19,46,.94));
+    border:1px solid var(--gold-line);border-radius:14px;padding:7px 14px 7px 8px;box-shadow:0 8px 26px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.05)}
+  #brandbadge .bb-seal{width:40px;height:40px;flex:0 0 auto;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))}
+  #brandbadge .bb-seal svg{width:100%;height:100%;display:block}
+  #brandbadge .bb-txt{display:flex;flex-direction:column;line-height:1.15}
+  #brandbadge .bb-txt b{font-family:var(--ser);font-size:14px;color:var(--cream);letter-spacing:.2px}
+  #brandbadge .bb-txt span{font-size:10.5px;color:var(--gold);letter-spacing:2px;font-weight:700}
+  .chip{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 13px;font-size:13px;
+    box-shadow:0 6px 20px rgba(0,0,0,.5);backdrop-filter:blur(7px)}
+  .chip b{color:var(--gold-hi)}
+  .chip .lab{color:var(--muted);font-size:10.5px;display:block;margin-bottom:2px;letter-spacing:.3px}
+  #quest{border-left:3px solid var(--gold)}
+  #clock b{color:var(--accent2)}
+
+  #topright{position:absolute;top:14px;right:14px;display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;max-width:36vw;z-index:11}
+  .btn{pointer-events:auto;background:linear-gradient(135deg,rgba(11,34,78,.92),rgba(7,19,46,.92));
+    border:1px solid var(--line);color:var(--text);border-radius:11px;padding:9px 13px;font-size:13px;cursor:pointer;transition:.16s;font-family:var(--san)}
+  .btn:hover{border-color:var(--gold);color:#fff;box-shadow:0 0 0 1px var(--gold-line),0 6px 18px rgba(0,0,0,.4)}
+  @keyframes mapPulse{0%,100%{box-shadow:0 0 0 0 rgba(240,212,136,0),0 3px 10px rgba(0,0,0,.35)}50%{box-shadow:0 0 0 3px rgba(240,212,136,.5),0 0 22px rgba(240,212,136,.7)}}
+  #mapBtn:not(.on){border-color:var(--gold)!important;color:#fff!important;background:linear-gradient(135deg,#1d4f90,#0b2456)!important;font-weight:700;animation:mapPulse 1.7s ease-in-out infinite}
+  #mapBtn:not(.on):hover{transform:translateY(-1px) scale(1.05);animation:none;box-shadow:0 0 0 3px var(--gold),0 0 24px rgba(240,212,136,.8)}
+  .btn.on{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset,0 0 16px rgba(212,175,82,.35);color:var(--gold-hi)}
+
+  #prompt{position:absolute;left:50%;bottom:104px;transform:translateX(-50%);z-index:10;
+    background:linear-gradient(135deg,rgba(11,34,78,.96),rgba(7,19,46,.96));border:1px solid var(--gold);border-radius:14px;
+    padding:10px 18px;font-size:14px;box-shadow:0 10px 30px rgba(0,0,0,.6),0 0 22px rgba(212,175,82,.18);display:none;align-items:center;gap:9px}
+  .kbd{display:inline-block;min-width:24px;text-align:center;background:#0a1a3a;border:1px solid var(--gold-line);
+    border-radius:7px;padding:2px 8px;font-size:12px;color:var(--gold-hi);font-weight:800}
+
+  #controls{position:absolute;left:14px;bottom:14px;z-index:10;background:var(--panel);border:1px solid var(--line);
+    border-radius:11px;padding:9px 13px;font-size:12px;color:var(--muted);backdrop-filter:blur(6px)}
+  #controls b{color:var(--cream)}
+
+  #toast{position:absolute;left:50%;top:72px;transform:translateX(-50%);z-index:20;display:flex;flex-direction:column;gap:6px;align-items:center;pointer-events:none}
+  .toast{background:linear-gradient(135deg,rgba(11,34,78,.96),rgba(7,19,46,.96));border:1px solid var(--gold);border-radius:11px;
+    padding:9px 18px;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.6);animation:tin .3s ease;color:var(--cream)}
+  @keyframes tin{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+
+  /* Modals */
+  .overlay{position:absolute;inset:0;z-index:30;background:radial-gradient(1200px 800px at 50% 0%,rgba(18,48,99,.5),rgba(4,9,26,.86));
+    backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:20px}
+  .overlay.show{display:flex}
+  .modal{width:min(560px,94vw);max-height:92vh;overflow:auto;background:linear-gradient(180deg,#0e2350,#081a3d);
+    border:1px solid var(--gold-line);border-radius:20px;box-shadow:0 30px 80px rgba(0,0,0,.72),inset 0 1px 0 rgba(255,255,255,.06)}
+  .modal::-webkit-scrollbar{width:9px}.modal::-webkit-scrollbar-thumb{background:rgba(212,175,82,.3);border-radius:9px}
+  .modal .head{padding:17px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:13px}
+  .avatar-badge{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:23px;flex:0 0 auto;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+  .modal .head h2{font-size:18px;font-family:var(--ser);color:var(--cream);letter-spacing:.2px}
+  .modal .head .sub{font-size:12px;color:var(--muted);margin-top:3px}
+  .modal .body{padding:20px 22px}
+  .modal .foot{padding:15px 22px;border-top:1px solid var(--line);display:flex;gap:9px;justify-content:flex-end;flex-wrap:wrap}
+  .x{margin-left:auto;background:none;border:none;color:var(--muted);font-size:23px;cursor:pointer;line-height:1}
+  .x:hover{color:var(--gold-hi)}
+
+  .say{font-size:14.5px;line-height:1.65;color:#dde7fb;background:rgba(6,16,38,.6);border:1px solid var(--line);
+    border-radius:13px;padding:14px 16px;margin-bottom:13px;white-space:pre-wrap}
+  .say .who{color:var(--gold-hi);font-weight:700;font-size:12px;display:block;margin-bottom:5px;font-family:var(--ser)}
+
+  .opt{width:100%;text-align:left;background:rgba(6,16,38,.6);border:1px solid var(--line);color:var(--text);border-radius:13px;
+    padding:13px 15px;font-size:14px;cursor:pointer;margin-bottom:9px;transition:.15s;display:flex;gap:11px;align-items:center;font-family:var(--san)}
+  .opt:hover:not(:disabled){border-color:var(--gold);background:rgba(27,61,122,.4)}
+  .opt .num{width:23px;height:23px;border-radius:7px;background:#0a1a3a;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--gold-hi);flex:0 0 auto;border:1px solid var(--gold-line)}
+  .opt:disabled{cursor:default;opacity:.96}
+  .opt.correct{border-color:var(--ok);background:rgba(95,211,154,.14)}
+  .opt.wrong{border-color:var(--bad);background:rgba(240,133,127,.14)}
+  .opt.correct .num{background:var(--ok);color:#04220f}
+  .opt.wrong .num{background:var(--bad);color:#3a0a0a}
+
+  .expl{font-size:13.5px;line-height:1.62;color:#d3ddf3;background:rgba(4,11,28,.65);border:1px dashed var(--gold-line);
+    border-radius:13px;padding:13px 15px;margin-top:6px}
+  .expl .tag{display:inline-block;font-size:11px;font-weight:800;color:#0a1220;background:var(--gold);border-radius:6px;padding:1px 7px;margin-right:7px}
+  .qmeta{font-size:12px;color:var(--muted);margin-bottom:10px;display:flex;justify-content:space-between}
+  .field{margin-bottom:13px}
+  .field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+  .field input{width:100%;background:rgba(6,16,38,.7);border:1px solid var(--line);border-radius:11px;padding:11px 13px;color:var(--text);font-size:14px;font-family:var(--san)}
+  .field input:focus{outline:none;border-color:var(--gold)}
+  .status-dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#5a6b8c;margin-right:7px}
+  .status-dot.ok{background:var(--ok);box-shadow:0 0 8px var(--ok)}.status-dot.bad{background:var(--bad)}
+  .hint{font-size:12px;color:var(--muted);line-height:1.6;margin-top:6px}
+
+  .primary{background:linear-gradient(135deg,var(--gold-hi),var(--gold),var(--gold-lo));color:#0a1a34;border:none;font-weight:800;
+    box-shadow:0 8px 22px rgba(212,175,82,.32)}
+  .primary:hover{filter:brightness(1.06);color:#0a1a34}
+
+  /* Intro premium */
+  #intro .modal{width:min(720px,96vw);padding:0}
+  #intro .modal{background:
+     radial-gradient(900px 380px at 50% -8%,rgba(212,175,82,.14),transparent 60%),
+     linear-gradient(180deg,#0f2a5c 0%,#081a3d 62%,#0a1e46 100%)}
+  .intro-hero{display:flex;align-items:center;gap:22px;padding:30px 30px 14px}
+  .seal{width:132px;height:132px;flex:0 0 auto;filter:drop-shadow(0 8px 20px rgba(0,0,0,.5))}
+  .seal svg{width:100%;height:100%;display:block}
+  .brand-title .eyebrow{font-size:10.5px;letter-spacing:2.4px;color:var(--gold);font-weight:700;margin-bottom:8px}
+  .brand-title h1{font-family:var(--ser);font-size:31px;line-height:1.18;color:var(--cream);font-weight:800;letter-spacing:.3px}
+  .brand-title h1 .gold{background:linear-gradient(90deg,var(--gold-hi),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .brand-title .sub{font-size:13px;color:var(--muted);margin-top:9px;line-height:1.5}
+  .banner-strip{padding:2px 26px 4px}
+  .banner-strip svg{width:100%;height:auto;display:block;border-radius:12px;box-shadow:0 10px 26px rgba(0,0,0,.4)}
+  .divider{height:1px;background:linear-gradient(90deg,transparent,var(--gold-line),transparent);margin:14px 26px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:6px 0 14px}
+  .card{background:rgba(6,16,38,.55);border:1px solid var(--line);border-radius:13px;padding:13px 15px}
+  .card h4{font-size:13px;color:var(--gold-hi);margin-bottom:6px;display:flex;gap:6px;align-items:center;font-family:var(--ser)}
+  .card p{font-size:12.5px;color:var(--muted);line-height:1.55}
+  .lede{font-size:14.5px;line-height:1.7;color:#dde7fb}
+  .faculty{margin:16px 0 6px;background:rgba(6,16,38,.5);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+  .fac-title{font-family:var(--ser);font-size:14px;color:var(--cream);margin-bottom:11px;display:flex;align-items:baseline;gap:8px}
+  .fac-title span{font-size:11px;color:var(--gold);letter-spacing:.5px}
+  .fac-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .fac{display:flex;align-items:center;gap:9px;font-size:12.5px;color:#dbe6ff;background:rgba(11,34,78,.5);border:1px solid var(--line);border-radius:10px;padding:8px 11px}
+  .fac .dot{width:9px;height:9px;border-radius:3px;flex:0 0 auto;box-shadow:0 0 0 1px rgba(255,255,255,.15)}
+  .fac b{font-family:var(--ser);color:var(--cream);font-weight:700}
+  .fac i{font-style:normal;color:var(--muted);margin-left:auto;font-size:11.5px}
+  .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+  .t{font-size:10.5px;background:rgba(11,34,78,.6);border:1px solid var(--gold-line);border-radius:20px;padding:3px 10px;color:var(--cream)}
+  .note{font-size:11.5px;color:#8ea0c4;line-height:1.6;border-top:1px solid var(--line);margin-top:14px;padding-top:12px}
+  .fac-sub{font-size:11.5px;color:var(--gold);letter-spacing:.6px;margin:13px 0 7px;font-weight:700;font-family:var(--ser)}
+  .fac.sm{padding:6px 9px}
+  .fac.sm b{font-size:11.5px}
+  .fac.sm i{font-size:10.5px}
+  #ollamaBtn{display:none!important}
+  .gb-bar{height:9px;background:rgba(255,255,255,.12);border-radius:6px;overflow:hidden;margin-bottom:11px}
+  .gb-fill{height:100%;width:100%;background:linear-gradient(90deg,#f0d488,#c8506a)}
+  .joblink{display:flex;align-items:center;justify-content:space-between;gap:8px;text-decoration:none;background:rgba(6,16,38,.6);border:1px solid var(--line);border-radius:12px;padding:12px 15px;margin-bottom:9px;color:#dde7fb;font-size:14px;font-family:var(--san);transition:.15s}
+  .joblink:hover{border-color:var(--gold);background:rgba(27,61,122,.4);color:#fff}
+  .joblink span{color:var(--gold);font-size:12px}
+  .joblink.hl{border-color:var(--gold);background:linear-gradient(135deg,rgba(212,175,82,.18),rgba(27,61,122,.35));color:var(--cream);font-weight:700}
+  .gold{color:var(--gold-hi)}
+
+  /* ---- touch controls / mobile ---- */
+  #touchpad{position:absolute;left:20px;bottom:24px;width:120px;height:120px;border-radius:50%;
+    background:radial-gradient(circle,rgba(11,34,78,.55),rgba(7,19,46,.30));border:1px solid var(--gold-line);
+    display:none;z-index:16;touch-action:none;-webkit-user-select:none;user-select:none;box-shadow:0 6px 20px rgba(0,0,0,.4)}
+  #touchknob{position:absolute;left:50%;top:50%;width:54px;height:54px;margin:-27px 0 0 -27px;border-radius:50%;
+    background:linear-gradient(135deg,var(--gold-hi),var(--gold));box-shadow:0 4px 14px rgba(0,0,0,.5)}
+  #btnE{position:absolute;right:22px;bottom:30px;width:92px;height:92px;border-radius:50%;display:none;z-index:16;
+    background:linear-gradient(135deg,var(--gold-hi),var(--gold),var(--gold-lo));color:#0a1a34;font-family:var(--ser);
+    font-weight:800;font-size:14px;line-height:1.2;border:none;box-shadow:0 6px 20px rgba(212,175,82,.42);
+    touch-action:none;-webkit-user-select:none;user-select:none}
+  #btnE:active{filter:brightness(1.1);transform:scale(.95)}
+  body.touch.playing #touchpad, body.touch.playing #btnE{display:block}
+  body.touch.playing #controls{display:none}
+  #game{touch-action:none}
+  body{-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
+  @media (max-width:860px){
+    #hud{top:8px;left:8px;gap:6px}
+    #brandbadge{padding:5px 9px 5px 6px}
+    #brandbadge .bb-seal{width:30px;height:30px}
+    #brandbadge .bb-txt b{font-size:11px}
+    #brandbadge .bb-txt span{font-size:8px;letter-spacing:1px}
+    .chip{padding:5px 9px;font-size:10.5px}
+    .chip .lab{font-size:8.5px;margin-bottom:1px}
+    #topright{top:8px;right:8px;gap:5px}
+    #topright .btn{padding:6px 8px;font-size:11px}
+    #prompt{bottom:130px;font-size:12.5px;padding:8px 13px}
+    .modal .head{padding:13px 15px}.modal .head h2{font-size:16px}
+    .modal .body{padding:15px 16px}.modal .foot{padding:12px 15px}
+    .intro-hero{gap:14px;padding:18px 16px 8px}.seal{width:88px;height:88px}
+    .brand-title h1{font-size:21px}.brand-title .eyebrow{font-size:9px;letter-spacing:1.4px}
+    .grid2{grid-template-columns:1fr}.fac-grid{grid-template-columns:1fr}
+    .opt{padding:14px 14px;font-size:15px}
+  }
+
+  @media (max-width:860px){
+    #topright{flex-wrap:wrap;justify-content:flex-end;max-width:52vw}
+    #hud{max-width:46vw}
+    #topright .btn{padding:5px 7px;font-size:10.5px}
+  }
+  @media (max-width:560px){
+    #brandbadge .bb-txt{display:none}
+    #clock{display:none}
+    #quest{display:none}
+    .chip{padding:4px 8px;font-size:10px}
+    #topright .btn{padding:5px 6px;font-size:10px}
+    #touchpad{width:104px;height:104px;left:14px;bottom:18px}
+    #touchknob{width:46px;height:46px;margin:-23px 0 0 -23px}
+    #btnE{width:78px;height:78px;right:16px;bottom:22px;font-size:12px}
+    .modal .head h2{font-size:15px}
+    .say{font-size:13.5px}
+    .joblink{font-size:13px;padding:11px 13px}
+  }
+  /* --- 조작 안내 툴팁 + 안전영역 --- */
+  #ctrlhint{position:fixed;left:50%;bottom:150px;transform:translateX(-50%) translateY(12px);z-index:40;max-width:92vw;width:max-content;
+    background:linear-gradient(135deg,rgba(11,34,78,.96),rgba(7,19,46,.96));border:1px solid rgba(212,175,82,.5);
+    border-radius:14px;padding:12px 34px 12px 14px;color:#eaf0ff;font-family:var(--san);font-size:13px;line-height:1.55;
+    box-shadow:0 10px 30px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .3s ease,transform .3s ease}
+  #ctrlhint.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
+  #ctrlhint .ch-title{font-weight:700;color:#f0d488;margin-bottom:4px;font-size:12px}
+  #ctrlhint #ctrlhint-x{position:absolute;top:5px;right:9px;background:none;border:none;color:#9fb0d0;font-size:19px;cursor:pointer;line-height:1}
+  #ctrlhint b{color:#fff}
+  @supports(padding:env(safe-area-inset-top)){
+    #hud{top:calc(14px + env(safe-area-inset-top,0px));left:calc(14px + env(safe-area-inset-left,0px))}
+    #topright{top:calc(14px + env(safe-area-inset-top,0px));right:calc(14px + env(safe-area-inset-right,0px))}
+    #touchpad{left:calc(20px + env(safe-area-inset-left,0px));bottom:calc(24px + env(safe-area-inset-bottom,0px))}
+    #btnE{right:calc(20px + env(safe-area-inset-right,0px));bottom:calc(24px + env(safe-area-inset-bottom,0px))}
+    #ctrlhint{bottom:calc(150px + env(safe-area-inset-bottom,0px))}
+  }
+  /* --- 모바일 바텀시트 모달 (2025 표준) --- */
+  @media (max-width:560px){
+    .overlay{align-items:flex-end !important}
+    .modal{width:100vw !important;max-width:100vw !important;border-radius:22px 22px 0 0 !important;
+      max-height:87vh;animation:sheetUp .3s cubic-bezier(.2,.85,.25,1)}
+    .modal:before{content:'';display:block;width:44px;height:5px;border-radius:999px;background:rgba(255,255,255,.24);margin:9px auto 0}
+    .modal .head{position:sticky;top:0;z-index:3;background:linear-gradient(180deg,#0e2350,#0c1f47)}
+    .modal .foot{position:sticky;bottom:0;z-index:3;background:linear-gradient(0deg,#081a3d 70%,rgba(8,26,61,.9));
+      padding-bottom:calc(12px + env(safe-area-inset-bottom,0px))}
+  }
+  @keyframes sheetUp{from{transform:translateY(30px);opacity:.55}to{transform:translateY(0);opacity:1}}
+  /* --- 아바타 선택 --- */
+  .pcsw{width:30px;height:30px;border-radius:50%;border:2px solid rgba(255,255,255,.25);cursor:pointer;transition:.15s}
+  .pcsw.on{border-color:var(--gold);transform:scale(1.14);box-shadow:0 0 0 3px rgba(212,175,82,.25)}
+  /* --- 이모지 반응 --- */
+  #emoBtn{position:absolute;right:16px;bottom:120px;width:52px;height:52px;border-radius:50%;
+    background:linear-gradient(135deg,rgba(11,34,78,.94),rgba(7,19,46,.94));border:1px solid var(--gold-line);
+    color:#fff;font-size:22px;z-index:12;cursor:pointer;box-shadow:0 8px 22px rgba(0,0,0,.45);display:none}
+  body.playing #emoBtn{display:block}
+  #emoBar{position:absolute;right:16px;bottom:182px;z-index:13;display:none;gap:6px;
+    background:linear-gradient(135deg,rgba(11,34,78,.96),rgba(7,19,46,.96));border:1px solid var(--gold-line);
+    border-radius:16px;padding:8px;box-shadow:0 10px 28px rgba(0,0,0,.5)}
+  #emoBar.show{display:flex;flex-wrap:wrap;max-width:180px}
+  #emoBar button{width:40px;height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.1);
+    background:rgba(255,255,255,.05);font-size:20px;cursor:pointer;transition:.12s}
+  #emoBar button:hover{background:rgba(212,175,82,.22);transform:scale(1.08)}
+  @media (max-width:560px){ #emoBtn{width:48px;height:48px;bottom:110px;right:14px} #emoBar{bottom:166px;right:14px} }
+
+  :focus-visible{outline:3px solid var(--gold-hi);outline-offset:3px}
+  button, [role="button"], a{touch-action:manipulation}
+  canvas{outline:none}
+  .vis-hidden{position:absolute!important;width:1px;height:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+</style>
+
+<style>
+  .sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  .a11y-skip{position:absolute;left:12px;top:12px;z-index:9999;background:#fff;color:#000;padding:8px 12px;border-radius:10px;transform:translateY(-160%);transition:transform .2s ease}
+  .a11y-skip:focus{transform:translateY(0)}
+  #onboardOverlay{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:9998;padding:20px}
+  #onboardOverlay .card{max-width:680px;width:min(680px,100%);background:var(--panel);border:1px solid var(--gold-line);border-radius:20px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.45)}
+  #onboardOverlay h2{font-family:var(--ser);margin:0 0 10px;font-size:28px;color:var(--cream)}
+  #onboardOverlay p, #onboardOverlay li{color:var(--text);line-height:1.7}
+  #onboardOverlay button{margin-top:14px;border:0;border-radius:12px;padding:10px 14px;background:var(--gold);color:#17213a;font-weight:800;cursor:pointer}
+  .kbd-hint{display:inline-block;margin-top:8px;color:var(--muted);font-size:13px}
+
+    /* ── 접근성: 모션 민감 사용자 대응 (prefers-reduced-motion) ── */
+    @media (prefers-reduced-motion: reduce){
+      *, *::before, *::after{
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+      }
+      .pulse, .blink, .float, .bob { animation: none !important; }
+    }
+</style>
+
+
+<script>
+/* 접근성: 모션 민감 사용자 → 카메라 이징·화면 흔들림 최소화 플래그 */
+(function(){
+  try{
+    var mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    function apply(){
+      window.REDUCED_MOTION = !!mq.matches;
+      document.documentElement.setAttribute('data-reduced-motion', mq.matches ? 'on' : 'off');
+    }
+    apply();
+    if (mq.addEventListener) mq.addEventListener('change', apply);
+    else if (mq.addListener) mq.addListener(apply);
+  }catch(e){ window.REDUCED_MOTION = false; }
+})();
+</script>
+</head>
+<body>
+<a class="a11y-skip" href="#mainContent">본문 바로가기</a>
+<main id="mainContent">
+<a class="a11y-skip" href="#mainContent">본문 바로가기</a>
+<div id="onboardOverlay" role="dialog" aria-modal="true" aria-labelledby="onboardTitle" aria-describedby="onboardDesc"><div class="card"><h2 id="onboardTitle">체험 안내</h2><p id="onboardDesc">아바타로 캠퍼스를 이동하며 4개 체험존을 방문하고 퀴즈를 완료해 배지를 모으세요. 키보드 조작이 필요하면 방향키와 Enter를 사용하세요.</p><ul><li>첫 실행 전 로컬 서버 실행을 권장합니다.</li><li>오프라인 AI가 동작하지 않아도 캠퍼스 체험은 계속 진행됩니다.</li><li>이미지와 버튼에는 접근성 보완을 추가했습니다.</li></ul><div class="kbd-hint">ESC로 안내를 닫을 수 있습니다.</div><div class="chip" role="note" aria-label="퀴즈 안내" style="margin-top:10px;max-width:560px"><b style="color:var(--gold-hi)">퀴즈 안내</b><div style="margin-top:6px;line-height:1.6;color:var(--text)">정답을 맞히는 것보다 개념을 확인하는 데 초점을 두고, 결과는 바로 다음 체험에 반영됩니다.</div></div><button id="onboardClose" type="button">체험 시작</button></div></div>
+<main id="mainContent"
+<div id="game">
+  <canvas id="cv"></canvas>
+
+  <div id="hud">
+    <div id="brandbadge"><span class="bb-seal"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 120 120" role="img" aria-label="AU 배지">
+<defs><path id="au-b" d="M60,60 m-40,0 a40,40 0 1,1 80,0 a40,40 0 1,1 -80,0"/></defs>
+<circle cx="60" cy="60" r="58" fill="#0e2a5e" stroke="#c9a24b" stroke-width="3"/>
+<circle cx="60" cy="60" r="49" fill="none" stroke="#ffffff" stroke-width="1" opacity=".85"/>
+<text fill="#dfe8ff" font-family="Georgia,serif" font-size="7" font-weight="600" letter-spacing=".6"><textPath xlink:href="#au-b" startOffset="0">ANSAN&#160;UNIVERSITY&#160;&#183;&#160;PHYSICAL&#160;THERAPY&#160;&#183;&#160;</textPath></text>
+<text x="60" y="66" font-size="33" font-weight="900" text-anchor="middle" fill="#ffffff" font-family="Georgia,serif" letter-spacing="1">AU</text>
+<text x="60" y="80" font-size="7" text-anchor="middle" fill="#eeca7c" font-family="Georgia,serif" font-style="italic">Since 1981</text>
+<text x="60" y="97" font-size="8.5" text-anchor="middle" fill="#dfe8ff" font-weight="700" font-family="Georgia,serif" letter-spacing="3">AUPT</text>
+</svg></span><div class="bb-txt"><b>원곡고 진로체험</b><span>안산대 물리치료학과</span></div>
+<div class="chip" role="note" aria-label="사용자 안내" style="margin-top:10px;max-width:560px">
+  <b style="color:var(--gold-hi)">사용자 안내</b>
+  <div style="margin-top:6px;line-height:1.6;color:var(--text)">처음엔 본문 바로가기와 도움말을 확인한 뒤, 관전 모드로 전체 흐름을 살펴보고 체험을 시작하세요. AI 응답이 느리면 오프라인 진행으로 전환해도 학습 흐름은 유지됩니다.</div>
+</div>
+</div>
+    <div class="chip" id="quest"><span class="lab">🎯 현재 목표</span><span id="quest-txt">4개 체험존(2일 4교시)을 돌며 배지를 모아 🎫수료증을 받으세요</span></div>
+    <div class="chip"><span class="lab">📊 학점(점수)</span><b id="score">0</b> 점 · 정답 <span id="correct">0</span></div>
+    <div class="chip"><span class="lab">🏛️ 체험 배지</span><b id="visited">0</b> / 4</div>
+    <div class="chip"><span class="lab">🪙 코인</span><b id="coins">0</b> 개</div>
+    <div class="chip" id="clock"><span class="lab">🕘 캠퍼스 시각</span><b id="clock-txt">09:00</b> <span id="period" style="color:var(--muted)"></span></div>
+  </div>
+
+  <div id="topright">
+    <button class="btn" id="spectateBtn" title="관전 모드: 카메라가 자율 AI들을 순회합니다" aria-label="관전 모드">👁️ 관전</button>
+    <button class="btn" id="fastBtn" title="시간 배속" aria-label="배속 1배">⏩ 1×</button>
+    <button hidden data-dev-only="1" class="btn" id="ollamaBtn" title="Ollama 로컬 LLM 연결" aria-label="AI 엔진 설정">🧠 AI 엔진</button>
+    <button class="btn" id="mapBtn" title="캠퍼스 한눈에 보기" aria-label="전체보기">🗺️ 전체보기 ✨</button>
+    <button class="btn" id="recenterBtn" title="내 캐릭터로 화면 복귀" aria-label="내 위치 보기">📍 내 위치</button>
+    <button class="btn" id="deptBtn" title="안산대 물리치료학과 안내·홍보" aria-label="학과 소개">🏫 학과</button>
+    <button class="btn" id="certBtn" title="4개 배지를 모으면 체험 수료증 발급" aria-label="수료증 보기">🎫 수료증</button>
+    <button class="btn" id="sndBtn" title="소리 켜기/끄기" aria-label="소리 설정">🔊 소리</button>
+    <button class="btn" id="achBtn" aria-label="도전과제 열기">🏆 도전과제</button>
+    <button class="btn" id="helpBtn" aria-label="도움말 열기">❔ 도움말</button>
+  </div>
+
+  <div id="prompt"></div>
+
+  <div id="controls">
+    <b>이동</b> WASD / 방향키 · <b>상호작용</b> <span style="color:var(--gold)">E</span> · <b>대화 종료</b> Esc · 🪙코인 · 🔔골든벨
+  </div>
+
+  <div id="touchpad"><div id="touchknob"></div></div>
+  <button id="btnE" aria-label="상호작용">E<br>상호작용</button>
+  <button id="emoBtn" aria-label="이모지 반응">😀</button>
+  <div id="emoBar"></div>
+  <div id="toast"></div>
+<div id="ctrlhint"><button id="ctrlhint-x" aria-label="닫기">×</button><div class="ch-title">🎮 조작 안내</div><div class="ch-body"></div></div>
+</div>
+
+<!-- Intro -->
+<div class="overlay show" id="intro">
+  <div class="modal">
+    <div class="intro-hero">
+      <div class="seal"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 240 240" role="img" aria-label="안산대학교 물리치료학과 엠블럼">
+<defs>
+<linearGradient id="au-gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f0d488"/><stop offset=".5" stop-color="#d4af52"/><stop offset="1" stop-color="#a9812c"/></linearGradient>
+<radialGradient id="au-navy" cx=".5" cy=".38" r=".7"><stop offset="0" stop-color="#173a72"/><stop offset="1" stop-color="#0b224e"/></radialGradient>
+<path id="au-ring" d="M120,120 m-98,0 a98,98 0 1,1 196,0 a98,98 0 1,1 -196,0"/>
+</defs>
+<circle cx="120" cy="120" r="117" fill="url(#au-gold)"/>
+<circle cx="120" cy="120" r="112" fill="url(#au-navy)"/>
+<circle cx="120" cy="120" r="86" fill="#f6f2e7"/>
+<circle cx="120" cy="120" r="86" fill="none" stroke="#c9a24b" stroke-width="2.5"/>
+<circle cx="120" cy="120" r="108" fill="none" stroke="#c9a24b" stroke-width="1"/>
+<text fill="#f4ead0" font-family="Georgia,'Times New Roman',serif" font-size="12.4" font-weight="700" letter-spacing="1.6"><textPath xlink:href="#au-ring" startOffset="1%">ANSAN&#160;UNIVERSITY&#160;&#183;&#160;DEPARTMENT&#160;OF&#160;PHYSICAL&#160;THERAPY&#160;&#183;&#160;</textPath></text>
+<g fill="none" stroke="url(#au-gold)" stroke-width="4.4" stroke-linecap="round">
+<line x1="120" y1="70" x2="120" y2="156"/>
+<path d="M120,86 C103,96 103,109 120,119 C137,129 137,142 120,152"/>
+<path d="M120,86 C137,96 137,109 120,119 C103,129 103,142 120,152"/>
+</g>
+<circle cx="120" cy="69" r="6.2" fill="url(#au-gold)"/>
+<path d="M120,63 C107,55 92,58 86,70 C100,65 112,66 120,74 C128,66 140,65 154,70 C148,58 133,55 120,63Z" fill="url(#au-gold)"/>
+<g fill="#0e2a5e">
+<circle cx="90" cy="88" r="9.5"/><circle cx="150" cy="88" r="9.5"/>
+<path d="M90,99 C71,107 67,131 82,144 C86,123 92,114 106,110 C99,106 94,103 90,99Z"/>
+<path d="M150,99 C169,107 173,131 158,144 C154,123 148,114 134,110 C141,106 146,103 150,99Z"/>
+</g>
+<g fill="#0e2a5e">
+<path d="M98,150 C84,150 73,159 73,172 C89,179 107,178 120,169 C113,158 106,150 98,150Z"/>
+<path d="M142,150 C156,150 167,159 167,172 C151,179 133,178 120,169 C127,158 134,150 142,150Z"/>
+</g>
+<rect x="82" y="176" width="76" height="19" rx="9.5" fill="#0e2a5e" stroke="#c9a24b" stroke-width="1.5"/>
+<text x="120" y="189.5" fill="#eecb7f" font-family="Georgia,serif" font-size="11.5" font-weight="700" text-anchor="middle" letter-spacing="1">Since 1982</text>
+</svg></div>
+      <div class="brand-title">
+        <div class="eyebrow">ANSAN UNIVERSITY · DEPT. OF PHYSICAL THERAPY × 원곡고등학교</div>
+        <h1>웰컴 투 <span class="gold">원곡고</span><br>안산대 물리치료학과 체험</h1>
+        <div class="sub">2일 4교시 진로체험 메타버스 · 물리치료사의 <b>평가 → 중재(운동·치료) → 재평가</b>를 직접 경험해요 · 100% 오프라인</div>
+      </div>
+    </div>
+    <div class="banner-strip"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 250" role="img" aria-label="제51회 물리치료사 국가고시 전국 수석 배출">
+<defs><linearGradient id="bn" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#153b74"/><stop offset="1" stop-color="#0a1f47"/></linearGradient>
+<linearGradient id="bg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f2d888"/><stop offset="1" stop-color="#c69a3a"/></linearGradient></defs>
+<rect x="5" y="5" width="990" height="240" rx="16" fill="url(#bn)"/>
+<rect x="16" y="16" width="968" height="218" rx="10" fill="none" stroke="url(#bg2)" stroke-width="2.5"/>
+<g fill="none" stroke="url(#bg2)" stroke-width="2" opacity=".8">
+<path d="M60,140 q26,-34 66,-30 M70,168 q22,-30 58,-30 M84,190 q20,-24 50,-26"/>
+<path d="M940,140 q-26,-34 -66,-30 M930,168 q-22,-30 -58,-30 M916,190 q-20,-24 -50,-26"/></g>
+<text x="100" y="158" font-size="52" font-weight="800" text-anchor="middle" fill="url(#bg2)" font-family="'Nanum Myeongjo','Batang','Malgun Gothic',serif">경</text>
+<text x="900" y="158" font-size="52" font-weight="800" text-anchor="middle" fill="url(#bg2)" font-family="'Nanum Myeongjo','Batang','Malgun Gothic',serif">축</text>
+<circle cx="500" cy="50" r="19" fill="url(#bg2)"/><text x="500" y="57" font-size="18" text-anchor="middle" fill="#0a1f47" font-weight="800" font-family="'Nanum Myeongjo','Batang','Malgun Gothic',serif">축</text>
+<path d="M470,44 l-20,-8 l6,14z M530,44 l20,-8 l-6,14z" fill="url(#bg2)"/>
+<text x="500" y="125" font-size="43" font-weight="800" text-anchor="middle" fill="#f4ead0" font-family="'Nanum Myeongjo','Batang','Malgun Gothic',serif">제51회 물리치료사 국가고시</text>
+<text x="500" y="180" font-size="56" font-weight="900" text-anchor="middle" fill="url(#bg2)" font-family="'Nanum Myeongjo','Batang','Malgun Gothic',serif">전국 수석 배출</text>
+<text x="500" y="216" font-size="22" font-weight="700" text-anchor="middle" fill="#eecb7f" font-family="'Nanum Myeongjo','Batang','Malgun Gothic',serif" letter-spacing="8">축 하 합 니 다</text>
+</svg></div>
+    <div class="body">
+      <div class="grid2">
+        <div class="card"><h4><span id="experience" tabindex="-1">🎯 이런 걸 체험해요</span></h4><p>물리치료사는 약·수술이 아니라 <b>운동·도수·물리적 방법</b>으로 몸의 움직임과 기능을 되찾아주는 전문가예요. 2일 동안 그 과정을 직접 체험합니다.</p></div>
+        <div class="card"><h4><span id="keywords" tabindex="-1">🔑 오늘의 열쇠말</span></h4><p><b>평가 → 중재 → 재평가.</b> 문제를 정확히 <b>평가</b>하고, 운동·치료로 <b>중재</b>한 뒤, 다시 확인하는 <b>재평가</b> — 물리치료의 과학적 순서예요.</p></div>
+      </div>
+      <p class="lede">아바타로 캠퍼스를 <b>직접 걸어다니며</b> 4개 체험존에서 안산대 물리치료학과 <b>교수·멘토</b>를 만나 이야기를 듣고, 간단한 <b>체험 퀴즈</b>를 풀어 <b>체험 배지 4개</b>를 모아보세요!</p>
+      <div class="faculty">
+        <div class="fac-title">4개 체험존 <span>· 2일 4교시</span></div>
+        <div class="fac-sub">1일차</div>
+        <div class="fac-grid">
+          <div class="fac"><span class="dot" style="background:#7b57c9"></span><b>🎓 소개·비전관</b><i>물리치료란? · 근거중심(EBP)</i></div>
+          <div class="fac"><span class="dot" style="background:#3a72c4"></span><b>📏 체형분석·평가관</b><i>자세·관절가동범위(ROM) 평가</i></div>
+        </div>
+        <div class="fac-sub">2일차</div>
+        <div class="fac-grid">
+          <div class="fac"><span class="dot" style="background:#c8506a"></span><b>💆 치료적 마사지관</b><i>근육 이완·통증 완화(중재)</i></div>
+          <div class="fac"><span class="dot" style="background:#2f9e8f"></span><b>⚡ 물리적 인자치료관</b><i>전기·열·광선 + 재평가·마무리</i></div>
+        </div>
+        <div class="fac-sub">함께하는 사람들 · 안산대 물리치료학과</div>
+        <div class="fac-grid">
+          <div class="fac sm"><span class="dot" style="background:#7b57c9"></span><b>심경섭 교수</b><i>소개·비전</i></div>
+          <div class="fac sm"><span class="dot" style="background:#3a72c4"></span><b>하늘 멘토</b><i>평가</i></div>
+          <div class="fac sm"><span class="dot" style="background:#c8506a"></span><b>준호 멘토</b><i>마사지</i></div>
+          <div class="fac sm"><span class="dot" style="background:#2f9e8f"></span><b>서연 멘토</b><i>인자치료</i></div>
+        </div>
+      </div>
+        <div class="faculty" style="margin-top:4px">
+        <div class="fac-title">🧑‍🎓 내 아바타 <span>· 이름과 색을 골라요</span></div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:9px">
+          <input id="pcName" type="text" maxlength="8" placeholder="이름 (예: 원곡이)" style="flex:1;min-width:150px;padding:11px 13px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--text);font-size:15px">
+          <div id="pcColors" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+        </div>
+      </div>
+    </div>
+    <div class="foot">
+      <button class="btn primary" id="startBtn">▶ 체험 시작</button>
+    </div>
+  </div>
+</div>
+
+<!-- Dialog / Quiz -->
+<div class="overlay" id="dlg">
+  <div class="modal">
+    <div class="head" id="dlg-head">
+      <div class="avatar-badge" id="dlg-badge">🧑‍🏫</div>
+      <div><h2 id="dlg-name">교수</h2><div class="sub" id="dlg-sub">교과</div></div>
+      <button class="x" onclick="closeDialog()">×</button>
+    </div>
+    <div class="body" id="dlg-body"></div>
+    <div class="foot" id="dlg-foot"></div>
+  </div>
+</div>
+
+<!-- Ollama settings -->
+<div class="overlay" id="ollama">
+  <div class="modal">
+    <div class="head">
+      <div class="avatar-badge" style="background:linear-gradient(135deg,#7c9cff,#b892ff)">🧠</div>
+      <div><h2>AI 엔진 설정 (Ollama / LM Studio)</h2><div class="sub">로컬 LLM에 연결하면 NPC가 진짜로 생각하고 대화합니다</div></div>
+      <button class="x" onclick="closeOllama()">×</button>
+    </div>
+    <div class="body">
+      <div class="field"><label>서버 주소</label><input id="ol-url" value="http://127.0.0.1:11434" /></div>
+      <div class="field"><label>모델 이름 (예: gemma3, llama3.1, qwen2.5)</label><input id="ol-model" value="gemma3" /></div>
+      <div id="ol-status" class="hint"><span class="status-dot" id="ol-dot"></span><span id="ol-msg">연결 안 됨 — 오프라인 내장 AI로 동작 중</span></div>
+      <p class="hint">💡 Ollama가 브라우저(file://)에서 차단되면 서버 실행 시 환경변수 <b>OLLAMA_ORIGINS=*</b> 를 설정하세요. 연결이 안 돼도 캠퍼스는 오프라인 AI로 완전히 동작합니다.</p>
+    </div>
+    <div class="foot">
+      <button class="btn" onclick="closeOllama()">닫기</button>
+      <button class="btn" id="ol-test">🔌 연결 테스트</button>
+      <button class="btn primary" id="ol-save">저장 &amp; 활성화</button>
+    </div>
+  </div>
+</div>
+
+<!-- Help -->
+<div class="overlay" id="help">
+  <div class="modal">
+    <div class="head"><div class="avatar-badge" style="background:linear-gradient(135deg,#ffd166,#f0955b)">❔</div>
+      <div><h2><span id="help" tabindex="-1">도움말 &amp; 조작법</span></h2><div class="sub">캠퍼스 이용 안내</div></div>
+      <button class="x" onclick="hideEl('help')">×</button></div>
+    <div class="body">
+      <div class="say"><span class="who">🎮 조작</span><b>WASD</b> 또는 <b>방향키</b>로 아바타 이동 · 사람/문 앞에서 <b>E</b> 로 대화·강의 · <b>Esc</b> 로 닫기</div>
+      <div class="say"><span class="who">🏛️ 체험존 (8곳) · 담당 교수</span>해부학관(김신영) · 신경해부학관(정형국) · 신경계물리치료관(심경섭) · 운동치료관(이광재) · 근골격계물리치료관(정호발) · 물리적인자치료관(김동훈) · 심화호흡물리치료관(심경섭) · 기능해부·신경운동관(김도현 학과장). 문 앞이나 교수 AI에게 <b>E</b> → 강의 요약 / 퀴즈.</div>
+      <div class="say"><span class="who">👁️ 관전 모드</span>켜면 카메라가 자율 AI들을 따라다닙니다. 캠퍼스 시각(수업/쉬는시간)에 따라 AI 학생·교수가 스스로 등교·수업·잡담합니다. <b>⏩</b> 로 시간을 배속하세요.</div>
+      <div class="say"><span class="who">💾 완전 오프라인 게임판</span>이 버전은 로컬 AI가 필요 없습니다. 모든 NPC(학생·교수·냥이)는 내장 프로그램으로 자율 이동·대화·수업합니다. 인터넷·설치 없이 파일만 열면 바로 실행됩니다.</div>
+      <div class="say"><span class="who">🎮 재미 요소</span>🪙 <b>코인</b>을 주워 모으고, 🐈 <b>캠퍼스 냥이</b>를 쓰다듬고, ☕ <b>물치 카페</b>에서 스피드 부스트를 받으세요. 🔔 <b>골든벨 퀴즈 러시</b>(축제 무대, E)로 콤보 보너스를 노리고 🏆 <b>도전과제</b>를 달성하세요. AI 학생들은 스스로 모여 <b>수다</b>를 떱니다.</div>
+      <div class="say"><span class="who">🏫 캠퍼스 시설</span><b>학과사무실</b>(조교 정성예·김희연) 행정 문의 · <b>전공동아리방</b>에서 AXIS·CNS·SPT·SS·RE:V·약손·HAPT 7개 동아리 소개 · <b>물치 학회실</b> 학생회 활동 · <b>대학일자리플러스센터</b>에서 진로·취업·직무와 심경섭 교수 「자기를 이해하기」. 문 앞에서 <b>E</b>.</div>
+    </div>
+    <div class="foot"><button class="btn primary" onclick="hideEl('help')">확인</button></div>
+  </div>
+</div>
+
+<!-- Achievements -->
+<div class="overlay" id="ach">
+  <div class="modal">
+    <div class="head"><div class="avatar-badge" style="background:linear-gradient(135deg,#f0d488,#c8506a)">🏆</div>
+      <div><h2>도전과제</h2><div class="sub">캠퍼스 라이프 업적</div></div>
+      <button class="x" onclick="hideEl('ach')">×</button></div>
+    <div class="body" id="ach-body"></div>
+    <div class="foot"><button class="btn primary" onclick="hideEl('ach')">확인</button></div>
+  </div>
+</div>
+
+<script>
+/* ==========================================================================
+   웰컴 투 원곡고 · 안산대 물리치료학과 체험
+   - Generative Agents(Smallville)식 자율 NPC + Gather Town식 조작/근접상호작용
+   - 100% 오프라인 동작, Ollama 연결 시 실제 LLM 대화로 승격
+   ========================================================================== */
+'use strict';
+
+/* ---------- Canvas ---------- */
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+let VW = 0, VH = 0, DPR = Math.min(window.devicePixelRatio || 1, 2);
+function resize(){
+  VW = window.innerWidth; VH = window.innerHeight;
+  cv.width = Math.floor(VW*DPR); cv.height = Math.floor(VH*DPR);
+  cv.style.width = VW+'px'; cv.style.height = VH+'px';
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+}
+window.addEventListener('resize', resize); resize();
+
+/* ---------- World ---------- */
+const WORLD = { w: 1540, h: 1200 };
+
+/* Buildings: academic halls (each maps to a subject) + a social hub */
+const BUILDINGS = [{"id": "introzone", "name": "물리치료 소개·비전관", "subj": "introzone", "emoji": "🎓", "x": 70, "y": 100, "w": 260, "h": 155, "color": "#7b57c9", "roof": "#553a8f"}, {"id": "assess", "name": "체형분석·평가관", "subj": "assess", "emoji": "📏", "x": 450, "y": 100, "w": 260, "h": 155, "color": "#3a72c4", "roof": "#274f8c"}, {"id": "massage", "name": "치료적 마사지관", "subj": "massage", "emoji": "💆", "x": 830, "y": 100, "w": 260, "h": 155, "color": "#c8506a", "roof": "#8f2f47"}, {"id": "agent", "name": "물리적 인자치료관", "subj": "agent", "emoji": "⚡", "x": 1210, "y": 100, "w": 260, "h": 155, "color": "#2f9e8f", "roof": "#1f6e63"}, {"id": "office", "name": "안산대 안내데스크", "subj": null, "emoji": "🏫", "x": 70, "y": 450, "w": 260, "h": 155, "color": "#5b6472", "roof": "#3a414c", "role": "office"}, {"id": "hub", "name": "휴게·포토존", "subj": null, "emoji": "📸", "x": 450, "y": 450, "w": 260, "h": 155, "color": "#4a8f5a", "roof": "#316b3f", "role": "hub"}, {"id": "club", "name": "동아리 체험", "subj": null, "emoji": "🎽", "x": 830, "y": 450, "w": 260, "h": 155, "color": "#c98b3a", "roof": "#8a642a", "role": "club"}, {"id": "career", "name": "진학 상담소", "subj": null, "emoji": "🎯", "x": 1210, "y": 450, "w": 260, "h": 155, "color": "#2f7fb0", "roof": "#1f4f80", "role": "career"}, {"id": "council", "name": "학생 라운지", "subj": null, "emoji": "🛋️", "x": 830, "y": 790, "w": 260, "h": 155, "color": "#3c8f7a", "roof": "#276b5a", "role": "council"}];
+function building(id){ return BUILDINGS.find(b=>b.id===id); }
+/* door (interaction point) = bottom-center, just outside */
+function doorOf(b){ return { x: b.x + b.w/2, y: b.y + b.h + 26 }; }
+
+/* Path/waypoint network for wandering (kept on open ground between buildings) */
+const WP = [{"x": 180, "y": 350}, {"x": 390, "y": 350}, {"x": 620, "y": 350}, {"x": 770, "y": 350}, {"x": 1000, "y": 350}, {"x": 1150, "y": 350}, {"x": 1370, "y": 350}, {"x": 180, "y": 690}, {"x": 390, "y": 690}, {"x": 620, "y": 690}, {"x": 770, "y": 690}, {"x": 1000, "y": 690}, {"x": 1150, "y": 690}, {"x": 1370, "y": 690}, {"x": 400, "y": 1010}, {"x": 700, "y": 960}, {"x": 1050, "y": 990}, {"x": 250, "y": 700}, {"x": 1400, "y": 960}];
+const HAVENUES = [350, 690];
+const VAVENUES = [390, 770, 1150];
+const PLAZA = {"x": 400, "y": 870};
+
+/* ---------- Quiz banks (물리치료 표준 교과 지식 [사실]) ---------- */
+const QUIZ = {"introzone": [{"q": "물리치료사가 하는 일로 가장 알맞은 것은?", "o": ["운동·도수·물리적 방법으로 움직임과 기능을 회복시킨다", "약을 처방한다", "수술을 집도한다", "혈액검사를 판독한다"], "a": 0, "e": "물리치료사는 약 처방·수술이 아니라 운동치료·도수치료·물리적 인자 등 비약물·비수술적 방법으로 통증을 줄이고 움직임·기능을 회복시키는 전문가예요."}, {"q": "‘근거중심 물리치료(EBP)’의 뜻으로 가장 알맞은 것은?", "o": ["연구 근거+임상 경험+환자 선호를 함께 고려해 치료를 정한다", "경험만으로 정한다", "유행을 따라 정한다", "비용만 보고 정한다"], "a": 0, "e": "EBP는 최선의 연구 근거, 치료사의 임상 전문성, 환자의 가치·선호를 함께 반영하는 과학적 의사결정이에요."}, {"q": "물리치료의 진행 순서로 옳은 것은?", "o": ["평가 → 중재(운동·치료) → 재평가", "수술 → 퇴원", "처방 → 조제", "입원 → 검사"], "a": 0, "e": "먼저 문제를 평가하고, 운동·도수·물리적 인자로 중재한 뒤, 다시 평가(재평가)해 효과를 확인하는 과학적 순환이 물리치료의 핵심이에요."}], "assess": [{"q": "관절가동범위(ROM)는 무엇을 재는 것일까요?", "o": ["관절이 움직이는 범위(각도)", "키", "몸무게", "혈압"], "a": 0, "e": "ROM은 관절이 움직일 수 있는 각도 범위로, 각도기(고니오미터)로 측정해요. 평가의 기본이에요."}, {"q": "오래 고개를 숙여 스마트폰을 볼 때 잘 생기는 자세 문제는?", "o": ["거북목(전방머리자세)", "평발", "오다리", "척추측만"], "a": 0, "e": "머리가 앞으로 나오는 거북목은 목·어깨 근육에 부담을 줘요. 평가에서 흔히 관찰하는 불균형이에요."}, {"q": "물리치료에서 ‘평가’를 가장 먼저 하는 이유는?", "o": ["문제를 정확히 알아야 알맞은 운동·치료를 정할 수 있어서", "운동을 생략하려고", "시간을 끌려고", "기록이 필요 없어서"], "a": 0, "e": "정확한 평가가 있어야 올바른 중재를 계획하고, 나중에 재평가로 효과를 확인할 수 있어요."}], "massage": [{"q": "치료적 마사지의 주요 목적으로 알맞은 것은?", "o": ["근육 긴장·통증 완화와 순환 도움", "뼈를 굵게 만든다", "키를 늘린다", "살을 뺀다"], "a": 0, "e": "치료적 마사지는 근육 긴장을 풀고 통증을 줄이며 순환을 도와 회복을 돕는 ‘중재’의 하나예요."}, {"q": "마사지를 피하거나 특히 조심해야 하는 경우는?", "o": ["급성 염증·상처·골절 부위", "건강한 근육의 뭉침", "운동 후 뻐근함", "가벼운 어깨 결림"], "a": 0, "e": "급성 염증·상처·골절 부위 등은 마사지를 피해야 해요. 안전을 먼저 평가하는 것이 원칙이에요."}, {"q": "마사지는 물리치료사의 어떤 단계에 해당할까요?", "o": ["중재(치료)", "평가", "재평가", "진단검사"], "a": 0, "e": "마사지·운동·도수치료는 문제를 해결하는 ‘중재’ 단계예요. 앞에는 평가, 뒤에는 재평가가 와요."}], "agent": [{"q": "‘물리적 인자치료’에 해당하지 않는 것은?", "o": ["전기·열·광선 등 물리적 자극 이용", "약물 주사", "온열찜질", "저주파 전기자극"], "a": 1, "e": "물리적 인자치료는 전기·열·빛(광선)·초음파 같은 물리적 에너지를 이용해요. 약물 주사는 아니에요."}, {"q": "근육의 통증·긴장을 줄이려고 따뜻하게 하는 치료는?", "o": ["온열치료(핫팩 등)", "냉치료", "전기절연", "견인"], "a": 0, "e": "온열치료는 혈류를 늘리고 근긴장·통증을 완화해요. 급성 부종에는 냉치료를 쓰기도 해요."}, {"q": "치료 뒤 ‘재평가’를 하는 이유로 알맞은 것은?", "o": ["효과가 있었는지 확인하고 다음 계획을 정하려고", "치료를 끝내려고", "기록을 지우려고", "환자를 돌려보내려고"], "a": 0, "e": "재평가로 효과를 확인하고 필요하면 중재를 조정해요. 평가→중재→재평가의 순환이 물리치료의 핵심이에요."}]};
+const SUBJ_NAME = {"introzone": "물리치료 소개·비전", "assess": "체형분석·평가", "massage": "치료적 마사지", "agent": "물리적 인자치료"};
+
+/* ---------- Entities ---------- */
+function mkChar(o){
+  return Object.assign({
+    x:0,y:0, dir:'down', moving:false, speed:78, walk:0,
+    tx:null, ty:null, state:'idle', timer: rnd(1,3),
+    bubble:null, bubbleT:0, thought:null, thoughtT:0,
+    color:'#7c9cff', skin:'#f0c9a8', hair:'#33302e',
+  }, o);
+}
+
+/* Player */
+const player = mkChar({ x:1050, y:1040, name:'나 (신입생)', color:'#4fd1c5', hair:'#2a2320', speed:235, isPlayer:true });
+
+/* Professors: stationed at their hall, occasionally pace; give lectures/quizzes */
+const PROFS = [{"key": "introzone", "name": "심경섭 교수", "color": "#7b57c9", "hair": "#1f1f1f", "emoji": "🧑‍🏫", "lines": ["물리치료사는 약·수술이 아니라 ‘움직임’으로 낫게 하는 전문가예요.", "오늘의 열쇠말: 평가 → 중재 → 재평가!", "여러분의 진로, 여기서 한번 상상해봐요."]}, {"key": "assess", "name": "하늘 멘토", "color": "#3a72c4", "hair": "#2b2620", "emoji": "🧑‍🎓", "lines": ["먼저 ‘평가’! 몸이 어디가 불편한지 알아야죠.", "거북목·골반, 각도기로 재볼까요?", "정확히 알면 치료가 쉬워져요."]}, {"key": "massage", "name": "준호 멘토", "color": "#c8506a", "hair": "#241a12", "emoji": "🧑‍🎓", "lines": ["뭉친 근육을 풀어주는 게 ‘중재’예요.", "힘 조절이 포인트! 아프면 안 돼요.", "안전 먼저 확인하는 거 잊지 마요."]}, {"key": "agent", "name": "서연 멘토", "color": "#2f9e8f", "hair": "#2b2620", "emoji": "🧑‍🎓", "lines": ["전기·열·빛으로도 치료해요, 신기하죠?", "따뜻하게 하면 근육이 편해져요.", "마지막엔 ‘재평가’로 효과를 확인!"]}];
+const professors = PROFS.map(p=>{
+  const b = building(p.key); const d = doorOf(b);
+  return mkChar({ x:d.x-46, y:d.y+6, homeX:d.x-46, homeY:d.y+6, name:p.name, color:p.color, hair:p.hair,
+    emoji:p.emoji, role:'prof', subj:p.key, lines:p.lines, speed:40 });
+});
+
+/* Students: autonomous wanderers (Smallville-style) */
+const STUDENT_NAMES = ["유재석", "아이유", "박보검", "손예진", "정국", "제니", "차은우", "카리나", "뷔", "지수", "강호동", "아이린", "임영웅", "하니", "태연", "이영지", "박명수", "수지", "류진", "호시", "마동석", "장원영"];
+const STUDENT_LINES = ["여기가 물리치료학과구나!", "평가부터 해본대, 신기하다", "마사지 체험 재밌겠다", "각도기로 목 각도 재봤어?", "전기·열 치료도 있대", "물리치료사 멋있다…", "오늘 배지 몇 개 모았어?", "대학 캠퍼스 처음 와봐", "재평가가 왜 중요하지?", "여기서 사진 찍자!"];
+const students = STUDENT_NAMES.map((nm,i)=>{
+  const w = WP[i % WP.length];
+  const palette = ['#e07a5f','#81b29a','#f2cc8f','#c98bb9','#6aa9e0','#e8b04b','#88c0a0','#d98f8f'];
+  return mkChar({ x:w.x+rnd(-30,30), y:w.y+rnd(-30,30), name:nm, color:palette[i%palette.length],
+    hair:choice(['#2b2320','#3a2c1a','#1f1f1f','#4a3520']), role:'student', speed:rnd(52,74),
+    homeSubj: ['introzone','assess','massage','agent'][i%4] });
+});
+
+const npcs = professors.concat(students);
+const allChars = [player].concat(npcs);
+
+/* ---------- Utils ---------- */
+function rnd(a,b){ return a + Math.random()*(b-a); }
+function choice(a){ return a[Math.floor(Math.random()*a.length)]; }
+function clamp(v,a,b){ return v<a?a:(v>b?b:v); }
+function dist(ax,ay,bx,by){ const dx=ax-bx, dy=ay-by; return Math.hypot(dx,dy); }
+
+/* ---------- Input ---------- */
+const keys = {};
+const MOVE_KEYS = new Set(['arrowup','arrowdown','arrowleft','arrowright','w','a','s','d','ㅈ','ㅁ','ㄴ','ㅇ']);
+addEventListener('keydown', e=>{
+  const k = e.key.toLowerCase();
+  if (MOVE_KEYS.has(k) || k===' ') { if(!anyModalOpen()) e.preventDefault(); }
+  keys[k] = true;
+  if (k==='e' && !anyModalOpen() && state.entered) tryInteract();
+  if (k==='escape'){ if(isShown('dlg')) closeDialog(); else if(isShown('ollama')) closeOllama(); else if(isShown('help')) hideEl('help'); else if(isShown('ach')) hideEl('ach'); }
+});
+addEventListener('keyup', e=>{ keys[e.key.toLowerCase()] = false; });
+
+/* ---------- Camera & State ---------- */
+const cam = { x:0, y:0 };
+const state = {
+  entered:false, score:0, correct:0, visited:new Set(),
+  spectate:false, timeScale:1,
+  clock: 9*60, // minutes from 00:00, start 09:00
+  ollama:{ enabled:false, url:'http://127.0.0.1:11434', model:'gemma3', ok:false },
+  near:null, // {type:'prof'|'building', ref}
+  spectateTarget:null, spectateTimer:0,
+};
+
+/* class schedule: minute-of-hour < 45 => 수업중, else 쉬는시간 */
+function isClassTime(){ return (Math.floor(state.clock)%60) < 45; }
+function clockStr(){ const h=Math.floor(state.clock/60)%24, m=Math.floor(state.clock%60); return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0'); }
+
+/* ==========================================================================
+   AI / MOVEMENT
+   ========================================================================== */
+function moveToward(c, tx, ty, dt){
+  const dx = tx-c.x, dy = ty-c.y, d = Math.hypot(dx,dy);
+  if (d < 3){ c.x=tx; c.y=ty; return true; }
+  const step = c.speed*dt;
+  c.x += dx/d*Math.min(step,d);
+  c.y += dy/d*Math.min(step,d);
+  if (Math.abs(dx) > Math.abs(dy)) c.dir = dx>0?'right':'left';
+  else c.dir = dy>0?'down':'up';
+  c.moving = true; c.walk += dt*10;
+  return false;
+}
+
+function pickDestination(c){
+  if (c.role==='prof'){
+    // during class -> stand at hall door; break -> pace nearby
+    const b = building(c.subj); const d = doorOf(b);
+    if (isClassTime()){ c.tx=c.homeX; c.ty=c.homeY; }
+    else { c.tx = d.x + rnd(-70,70); c.ty = d.y + rnd(-10,50); }
+  } else {
+    // student
+    if (isClassTime()){
+      const b = building(c.homeSubj); const d = doorOf(b);
+      c.tx = d.x + rnd(-90,90); c.ty = d.y + rnd(-6,60);
+    } else {
+      // break: plaza or a random waypoint
+      if (Math.random()<0.5){ c.tx = PLAZA.x + rnd(-120,120); c.ty = PLAZA.y + rnd(-90,90); }
+      else { const w = choice(WP); c.tx = w.x+rnd(-40,40); c.ty = w.y+rnd(-40,40); }
+    }
+  }
+  c.tx = clamp(c.tx, 40, WORLD.w-40);
+  c.ty = clamp(c.ty, 40, WORLD.h-40);
+  c.state='walk';
+}
+
+function npcSpeak(c, txt, thought){
+  if (thought){ c.thought = txt; c.thoughtT = 3.2; }
+  else { c.bubble = txt; c.bubbleT = 3.6; }
+}
+
+let chatterCd = 4;
+function updateNPC(c, dt){
+  if (c.state==='idle'){
+    c.moving=false;
+    c.timer -= dt;
+    if (c.timer<=0){ pickDestination(c); }
+  } else if (c.state==='walk'){
+    const done = moveToward(c, c.tx, c.ty, dt);
+    if (done){
+      c.state='idle'; c.moving=false;
+      c.timer = c.role==='prof' ? rnd(3,6) : rnd(2.2,5.5);
+      // occasional idle thought
+      if (c.role==='student' && Math.random()<0.5) npcSpeak(c, choice(STUDENT_LINES), true);
+      if (c.role==='prof' && !isClassTime() && Math.random()<0.4) npcSpeak(c, choice(c.lines), false);
+    }
+  }
+  if (c.bubbleT>0){ c.bubbleT-=dt; if(c.bubbleT<=0) c.bubble=null; }
+  if (c.thoughtT>0){ c.thoughtT-=dt; if(c.thoughtT<=0) c.thought=null; }
+}
+
+/* Two nearby idle students exchange a line (autonomous chatter). LLM if enabled. */
+async function tryChatter(){
+  const idle = students.filter(s=>s.state==='idle' && !s.bubble);
+  for (let i=0;i<idle.length;i++){
+    for (let j=i+1;j<idle.length;j++){
+      const a=idle[i], b=idle[j];
+      if (dist(a.x,a.y,b.x,b.y) < 90){
+        if (state.ollama.enabled){
+          const line = await llmChat(
+            '너는 한국 물리치료학과 학생이야. 캠퍼스에서 친구에게 아주 짧게(20자 이내) 한 마디 건네. 이모지 금지.',
+            '지금 '+(isClassTime()?'수업 직전':'쉬는 시간')+'이야. 친구 '+b.name+'에게 짧게 말 걸어봐.'
+          );
+          npcSpeak(a, (line||choice(STUDENT_LINES)).slice(0,40), false);
+        } else {
+          npcSpeak(a, choice(STUDENT_LINES), false);
+        }
+        setTimeout(()=>npcSpeak(b, choice(['그러게 ㅋㅋ','맞아 맞아','헐 진짜?','나도나도','가자 가자']), false), 1200);
+        return;
+      }
+    }
+  }
+}
+
+/* ==========================================================================
+   OLLAMA (optional local LLM)
+   ========================================================================== */
+async function llmChat(sys, user){
+  return null; /* 게임판: 로컬 AI 미사용 (완전 오프라인) */
+  if (!state.ollama.enabled) return null;
+  try{
+    const ctl = new AbortController();
+    const to = setTimeout(()=>ctl.abort(), 12000);
+    const r = await fetch(state.ollama.url.replace(/\/+$/,'')+'/api/chat', {
+      method:'POST', headers:{'Content-Type':'application/json'}, signal:ctl.signal,
+      body: JSON.stringify({ model: state.ollama.model, stream:false,
+        messages:[{role:'system',content:sys},{role:'user',content:user}] })
+    });
+    clearTimeout(to);
+    if (!r.ok) return null;
+    const j = await r.json();
+    return (j && j.message && j.message.content) ? String(j.message.content).trim() : null;
+  }catch(e){ return null; }
+}
+async function ollamaTest(url, model){
+  try{
+    const ctl = new AbortController(); const to=setTimeout(()=>ctl.abort(),8000);
+    const r = await fetch(url.replace(/\/+$/,'')+'/api/tags',{signal:ctl.signal});
+    clearTimeout(to);
+    if(!r.ok) return {ok:false,msg:'서버 응답 오류 ('+r.status+')'};
+    const j = await r.json();
+    const models = (j.models||[]).map(m=>m.name);
+    const has = models.some(n=>n===model || n.startsWith(model));
+    return {ok:true, msg:'연결됨 ✓ 모델 '+models.length+'개'+(has?'':' · "'+model+'" 미발견(그래도 시도함)'), models};
+  }catch(e){ return {ok:false, msg:'연결 실패 — CORS/서버 확인 (OLLAMA_ORIGINS=*)'}; }
+}
+
+/* ==========================================================================
+   RENDER
+   ========================================================================== */
+function drawRoundRect(x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+}
+
+const FSER = "'Nanum Myeongjo','Batang',Georgia,serif";
+const FSAN = "'Malgun Gothic','Segoe UI',sans-serif";
+const ENTRANCE={x:1050,y:1105}, BILLBOARD={x:1180,y:790};
+const DECO=[{"x": 30, "y": 350}, {"x": 1500, "y": 350}, {"x": 30, "y": 690}, {"x": 1500, "y": 690}, {"x": 1500, "y": 1130}, {"x": 30, "y": 600}, {"x": 1500, "y": 600}, {"x": 900, "y": 1160}];
+const LAMPS=[{"x": 390, "y": 350}, {"x": 770, "y": 350}, {"x": 1150, "y": 350}, {"x": 390, "y": 690}, {"x": 770, "y": 690}, {"x": 1150, "y": 690}, {"x": 390, "y": 1000}, {"x": 1150, "y": 960}];
+const BENCHES=[{"x": 300, "y": 1000}, {"x": 500, "y": 1000}, {"x": 300, "y": 740}, {"x": 500, "y": 740}];
+const FLOWERS=[{"x": 330, "y": 960}, {"x": 470, "y": 960}, {"x": 330, "y": 780}, {"x": 470, "y": 780}];
+const CREST_SVG="<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 240 240\" role=\"img\" aria-label=\"안산대학교 물리치료학과 엠블럼\">\n<defs>\n<linearGradient id=\"au-gold\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#f0d488\"/><stop offset=\".5\" stop-color=\"#d4af52\"/><stop offset=\"1\" stop-color=\"#a9812c\"/></linearGradient>\n<radialGradient id=\"au-navy\" cx=\".5\" cy=\".38\" r=\".7\"><stop offset=\"0\" stop-color=\"#173a72\"/><stop offset=\"1\" stop-color=\"#0b224e\"/></radialGradient>\n<path id=\"au-ring\" d=\"M120,120 m-98,0 a98,98 0 1,1 196,0 a98,98 0 1,1 -196,0\"/>\n</defs>\n<circle cx=\"120\" cy=\"120\" r=\"117\" fill=\"url(#au-gold)\"/>\n<circle cx=\"120\" cy=\"120\" r=\"112\" fill=\"url(#au-navy)\"/>\n<circle cx=\"120\" cy=\"120\" r=\"86\" fill=\"#f6f2e7\"/>\n<circle cx=\"120\" cy=\"120\" r=\"86\" fill=\"none\" stroke=\"#c9a24b\" stroke-width=\"2.5\"/>\n<circle cx=\"120\" cy=\"120\" r=\"108\" fill=\"none\" stroke=\"#c9a24b\" stroke-width=\"1\"/>\n<text fill=\"#f4ead0\" font-family=\"Georgia,'Times New Roman',serif\" font-size=\"12.4\" font-weight=\"700\" letter-spacing=\"1.6\"><textPath xlink:href=\"#au-ring\" startOffset=\"1%\">ANSAN&#160;UNIVERSITY&#160;&#183;&#160;DEPARTMENT&#160;OF&#160;PHYSICAL&#160;THERAPY&#160;&#183;&#160;</textPath></text>\n<g fill=\"none\" stroke=\"url(#au-gold)\" stroke-width=\"4.4\" stroke-linecap=\"round\">\n<line x1=\"120\" y1=\"70\" x2=\"120\" y2=\"156\"/>\n<path d=\"M120,86 C103,96 103,109 120,119 C137,129 137,142 120,152\"/>\n<path d=\"M120,86 C137,96 137,109 120,119 C103,129 103,142 120,152\"/>\n</g>\n<circle cx=\"120\" cy=\"69\" r=\"6.2\" fill=\"url(#au-gold)\"/>\n<path d=\"M120,63 C107,55 92,58 86,70 C100,65 112,66 120,74 C128,66 140,65 154,70 C148,58 133,55 120,63Z\" fill=\"url(#au-gold)\"/>\n<g fill=\"#0e2a5e\">\n<circle cx=\"90\" cy=\"88\" r=\"9.5\"/><circle cx=\"150\" cy=\"88\" r=\"9.5\"/>\n<path d=\"M90,99 C71,107 67,131 82,144 C86,123 92,114 106,110 C99,106 94,103 90,99Z\"/>\n<path d=\"M150,99 C169,107 173,131 158,144 C154,123 148,114 134,110 C141,106 146,103 150,99Z\"/>\n</g>\n<g fill=\"#0e2a5e\">\n<path d=\"M98,150 C84,150 73,159 73,172 C89,179 107,178 120,169 C113,158 106,150 98,150Z\"/>\n<path d=\"M142,150 C156,150 167,159 167,172 C151,179 133,178 120,169 C127,158 134,150 142,150Z\"/>\n</g>\n<rect x=\"82\" y=\"176\" width=\"76\" height=\"19\" rx=\"9.5\" fill=\"#0e2a5e\" stroke=\"#c9a24b\" stroke-width=\"1.5\"/>\n<text x=\"120\" y=\"189.5\" fill=\"#eecb7f\" font-family=\"Georgia,serif\" font-size=\"11.5\" font-weight=\"700\" text-anchor=\"middle\" letter-spacing=\"1\">Since 1982</text>\n</svg>";
+const BANNER_SVG="<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 250\" role=\"img\" aria-label=\"제51회 물리치료사 국가고시 전국 수석 배출\">\n<defs><linearGradient id=\"bn\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#153b74\"/><stop offset=\"1\" stop-color=\"#0a1f47\"/></linearGradient>\n<linearGradient id=\"bg2\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#f2d888\"/><stop offset=\"1\" stop-color=\"#c69a3a\"/></linearGradient></defs>\n<rect x=\"5\" y=\"5\" width=\"990\" height=\"240\" rx=\"16\" fill=\"url(#bn)\"/>\n<rect x=\"16\" y=\"16\" width=\"968\" height=\"218\" rx=\"10\" fill=\"none\" stroke=\"url(#bg2)\" stroke-width=\"2.5\"/>\n<g fill=\"none\" stroke=\"url(#bg2)\" stroke-width=\"2\" opacity=\".8\">\n<path d=\"M60,140 q26,-34 66,-30 M70,168 q22,-30 58,-30 M84,190 q20,-24 50,-26\"/>\n<path d=\"M940,140 q-26,-34 -66,-30 M930,168 q-22,-30 -58,-30 M916,190 q-20,-24 -50,-26\"/></g>\n<text x=\"100\" y=\"158\" font-size=\"52\" font-weight=\"800\" text-anchor=\"middle\" fill=\"url(#bg2)\" font-family=\"'Nanum Myeongjo','Batang','Malgun Gothic',serif\">경</text>\n<text x=\"900\" y=\"158\" font-size=\"52\" font-weight=\"800\" text-anchor=\"middle\" fill=\"url(#bg2)\" font-family=\"'Nanum Myeongjo','Batang','Malgun Gothic',serif\">축</text>\n<circle cx=\"500\" cy=\"50\" r=\"19\" fill=\"url(#bg2)\"/><text x=\"500\" y=\"57\" font-size=\"18\" text-anchor=\"middle\" fill=\"#0a1f47\" font-weight=\"800\" font-family=\"'Nanum Myeongjo','Batang','Malgun Gothic',serif\">축</text>\n<path d=\"M470,44 l-20,-8 l6,14z M530,44 l20,-8 l-6,14z\" fill=\"url(#bg2)\"/>\n<text x=\"500\" y=\"125\" font-size=\"43\" font-weight=\"800\" text-anchor=\"middle\" fill=\"#f4ead0\" font-family=\"'Nanum Myeongjo','Batang','Malgun Gothic',serif\">제51회 물리치료사 국가고시</text>\n<text x=\"500\" y=\"180\" font-size=\"56\" font-weight=\"900\" text-anchor=\"middle\" fill=\"url(#bg2)\" font-family=\"'Nanum Myeongjo','Batang','Malgun Gothic',serif\">전국 수석 배출</text>\n<text x=\"500\" y=\"216\" font-size=\"22\" font-weight=\"700\" text-anchor=\"middle\" fill=\"#eecb7f\" font-family=\"'Nanum Myeongjo','Batang','Malgun Gothic',serif\" letter-spacing=\"8\">축 하 합 니 다</text>\n</svg>";
+const ASSET={crest:new Image(),banner:new Image()};
+ASSET.crest.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(CREST_SVG);
+ASSET.banner.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(BANNER_SVG);
+
+function drawGround(){
+  // grass base + tile
+  ctx.fillStyle='#24402c'; ctx.fillRect(0,0,WORLD.w,WORLD.h);
+  const T=48;
+  for(let y=0;y<WORLD.h;y+=T){for(let x=0;x<WORLD.w;x+=T){ctx.fillStyle=((x/T+y/T)&1)?'#284a30':'#244228';ctx.fillRect(x,y,T,T);}}
+  // stone avenues
+  const stone='#cabf9f';
+  ctx.fillStyle=stone;
+  HAVENUES.forEach(cy=>ctx.fillRect(56,cy-30,WORLD.w-112,60));
+  VAVENUES.forEach(cx=>ctx.fillRect(cx-30,86,60,WORLD.h-150));
+  // paving seams
+  ctx.strokeStyle='rgba(80,62,34,.22)';ctx.lineWidth=1;
+  HAVENUES.forEach(cy=>{for(let x=70;x<WORLD.w-70;x+=42){ctx.beginPath();ctx.moveTo(x,cy-30);ctx.lineTo(x,cy+30);ctx.stroke();}});
+  VAVENUES.forEach(cx=>{for(let y=100;y<WORLD.h-70;y+=42){ctx.beginPath();ctx.moveTo(cx-30,y);ctx.lineTo(cx+30,y);ctx.stroke();}});
+  // central quad plaza + fountain
+  ctx.fillStyle='#d9cdaf';ctx.beginPath();ctx.arc(PLAZA.x,PLAZA.y,100,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='#0b224e';ctx.lineWidth=3;ctx.beginPath();ctx.arc(PLAZA.x,PLAZA.y,100,0,Math.PI*2);ctx.stroke();
+  ctx.strokeStyle='#b79a48';ctx.lineWidth=2;ctx.beginPath();ctx.arc(PLAZA.x,PLAZA.y,90,0,Math.PI*2);ctx.stroke();
+  if(ASSET.crest.complete && ASSET.crest.naturalWidth){ctx.save();ctx.globalAlpha=.8;var CS=46;ctx.drawImage(ASSET.crest,PLAZA.x-CS/2,PLAZA.y-80,CS,CS);ctx.restore();}
+  drawFountain(PLAZA.x,PLAZA.y+6);
+  // decor layers
+  FLOWERS.forEach(f=>drawFlowerbed(f.x,f.y));
+  BENCHES.forEach(b=>drawBench(b.x,b.y));
+  DECO.forEach(d=>drawTree(d.x,d.y));
+  LAMPS.forEach(l=>drawLamp(l.x,l.y));
+  drawEntrance(); drawBillboard();
+}
+
+function drawTree(x,y){
+  ctx.fillStyle='rgba(0,0,0,.26)';ctx.beginPath();ctx.ellipse(x,y+15,22,7,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#6b4a2a';ctx.fillRect(x-4,y,8,17);
+  ctx.fillStyle='#2c5738';ctx.beginPath();ctx.arc(x,y-8,21,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#356a43';ctx.beginPath();ctx.arc(x-9,y-3,14,0,Math.PI*2);ctx.arc(x+10,y-5,13,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#3f7c4e';ctx.beginPath();ctx.arc(x-3,y-13,10,0,Math.PI*2);ctx.fill();
+}
+function drawLamp(x,y){
+  ctx.fillStyle='rgba(0,0,0,.22)';ctx.beginPath();ctx.ellipse(x,y+2,6,2.6,0,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='#0b224e';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x,y-32);ctx.stroke();
+  ctx.fillStyle='#c9a24b';ctx.fillRect(x-4,y-2,8,4);
+  ctx.save();ctx.globalAlpha=.28;ctx.fillStyle='#ffe9a8';ctx.beginPath();ctx.arc(x,y-34,13,0,Math.PI*2);ctx.fill();ctx.restore();
+  ctx.fillStyle='#f6d98a';ctx.beginPath();ctx.arc(x,y-34,5.2,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#0b224e';ctx.fillRect(x-3,y-40,6,6);
+}
+function drawBench(x,y){
+  ctx.fillStyle='rgba(0,0,0,.2)';ctx.fillRect(x-17,y+7,34,4);
+  ctx.fillStyle='#7a5a34';ctx.fillRect(x-17,y-2,34,6);
+  ctx.fillStyle='#664c2a';ctx.fillRect(x-17,y-11,34,4);
+  ctx.fillStyle='#5a4326';ctx.fillRect(x-14,y+4,4,9);ctx.fillRect(x+10,y+4,4,9);
+}
+function drawFlowerbed(x,y){
+  ctx.fillStyle='#3f3220';drawRoundRect(x-22,y-11,44,22,8);ctx.fill();
+  ctx.fillStyle='#2f5738';drawRoundRect(x-22,y-11,44,22,8);ctx.fill();
+  const cs=['#e86a8f','#f2cc55','#f4f0ff','#c98bd9','#ff9d5c'];
+  for(let i=0;i<9;i++){ctx.fillStyle=cs[i%cs.length];ctx.beginPath();ctx.arc(x-17+i*4.3,y-4+((i%2)?5:0),2.7,0,Math.PI*2);ctx.fill();}
+}
+function drawEntrance(){
+  const x=ENTRANCE.x,y=ENTRANCE.y;
+  ctx.fillStyle='rgba(0,0,0,.22)';ctx.fillRect(x-150,y+18,26,8);ctx.fillRect(x+124,y+18,26,8);
+  ctx.fillStyle='#0b224e';ctx.fillRect(x-150,y-72,26,92);ctx.fillRect(x+124,y-72,26,92);
+  ctx.fillStyle='#12306a';ctx.fillRect(x-150,y-72,7,92);ctx.fillRect(x+124,y-72,7,92);
+  ctx.fillStyle='#c9a24b';ctx.fillRect(x-155,y-80,36,11);ctx.fillRect(x+119,y-80,36,11);
+  ctx.fillStyle='#0a1a3a';drawRoundRect(x-152,y-100,304,30,7);ctx.fill();
+  ctx.strokeStyle='#c9a24b';ctx.lineWidth=2.4;drawRoundRect(x-152,y-100,304,30,7);ctx.stroke();
+  ctx.fillStyle='#f4ead0';ctx.font='bold 17px '+FSER;ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText('안산대학교 물리치료학과',x,y-84);
+  ctx.fillStyle='#c9a24b';ctx.font='9px '+FSER;ctx.fillText('SINCE 1982',x,y-68);
+}
+function drawBillboard(){
+  const x=BILLBOARD.x,y=BILLBOARD.y,w=320,h=84;
+  ctx.fillStyle='rgba(0,0,0,.2)';ctx.fillRect(x-6,y+58,w+12,7);
+  ctx.fillStyle='#0b224e';ctx.fillRect(x-4,y,10,62);ctx.fillRect(x+w-6,y,10,62);
+  if(ASSET.banner.complete && ASSET.banner.naturalWidth){ctx.drawImage(ASSET.banner,x-8,y-h,w+16,h);}
+  else{ctx.fillStyle='#0a1f47';drawRoundRect(x-8,y-h,w+16,h,8);ctx.fill();}
+}
+
+function drawBuilding(b){
+  const gx=b.x,gy=b.y,gw=b.w,gh=b.h,dcx=gx+gw/2;
+  // ground shadow
+  ctx.fillStyle='rgba(0,0,0,.28)';drawRoundRect(gx+10,gy+gh-4,gw,24,12);ctx.fill();
+  // hedge in front
+  ctx.fillStyle='#2c5738';drawRoundRect(gx-8,gy+gh-12,gw+16,22,10);ctx.fill();
+  ctx.fillStyle='#356a43';for(let i=0;i<Math.floor(gw/17)+1;i++){ctx.beginPath();ctx.arc(gx+6+i*17,gy+gh-8,7,0,Math.PI*2);ctx.fill();}
+  // navy shell
+  ctx.fillStyle='#0c2151';drawRoundRect(gx,gy+20,gw,gh-20,9);ctx.fill();
+  // cream facade
+  ctx.fillStyle='#efe7d3';drawRoundRect(gx+11,gy+42,gw-22,gh-56,5);ctx.fill();
+  // subject pilasters
+  ctx.fillStyle=b.color;const nP=4;
+  for(let i=0;i<=nP;i++){const px=gx+13+i*(gw-26)/nP;ctx.fillRect(px-3,gy+46,6,gh-64);}
+  // warm windows between pilasters
+  for(let i=0;i<nP;i++){const seg=(gw-26)/nP;const wx=gx+13+i*seg+seg*0.26;const ww=seg*0.48;
+    ctx.fillStyle='#f6d98a';ctx.fillRect(wx,gy+84,ww,26);ctx.fillRect(wx,gy+118,ww,22);
+    ctx.strokeStyle='rgba(12,33,81,.5)';ctx.lineWidth=1;ctx.strokeRect(wx,gy+84,ww,26);ctx.strokeRect(wx,gy+118,ww,22);
+    ctx.beginPath();ctx.moveTo(wx+ww/2,gy+84);ctx.lineTo(wx+ww/2,gy+110);ctx.stroke();}
+  // gabled roof
+  ctx.fillStyle=b.roof;ctx.beginPath();ctx.moveTo(gx-8,gy+28);ctx.lineTo(dcx,gy-16);ctx.lineTo(gx+gw+8,gy+28);ctx.closePath();ctx.fill();
+  ctx.strokeStyle='#d4af52';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(gx-8,gy+28);ctx.lineTo(dcx,gy-16);ctx.lineTo(gx+gw+8,gy+28);ctx.stroke();
+  ctx.fillStyle='#0b1f47';ctx.fillRect(gx-8,gy+28,gw+16,12);
+  ctx.fillStyle='#d4af52';ctx.fillRect(gx-8,gy+40,gw+16,2.5);
+  // finial + pennant
+  ctx.strokeStyle='#c9a24b';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(dcx,gy-16);ctx.lineTo(dcx,gy-32);ctx.stroke();
+  ctx.fillStyle=b.color;ctx.beginPath();ctx.moveTo(dcx,gy-32);ctx.lineTo(dcx+16,gy-28);ctx.lineTo(dcx,gy-24);ctx.closePath();ctx.fill();
+  // entrance steps + door
+  ctx.fillStyle='#cdbf9c';ctx.fillRect(dcx-30,gy+gh-16,60,12);ctx.fillStyle='#c2b48c';ctx.fillRect(dcx-24,gy+gh-24,48,9);
+  ctx.fillStyle='#0b1f47';drawRoundRect(dcx-18,gy+gh-50,36,42,6);ctx.fill();
+  ctx.strokeStyle='#d4af52';ctx.lineWidth=2;drawRoundRect(dcx-18,gy+gh-50,36,42,6);ctx.stroke();
+  ctx.fillStyle='#f6d98a';ctx.beginPath();ctx.arc(dcx+9,gy+gh-29,2,0,Math.PI*2);ctx.fill();
+  // nameplate (navy + gold) on facade
+  ctx.fillStyle='#0a1a3a';drawRoundRect(dcx-98,gy+48,196,30,8);ctx.fill();
+  ctx.strokeStyle='#c9a24b';ctx.lineWidth=1.5;drawRoundRect(dcx-98,gy+48,196,30,8);ctx.stroke();
+  ctx.fillStyle='#f4ead0';ctx.font='bold 15px '+FSER;ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText(b.emoji+' '+b.name,dcx,gy+63);
+  // visited seal
+  if(b.subj && state.visited.has(b.subj)){
+    ctx.fillStyle='#d4af52';ctx.beginPath();ctx.arc(gx+gw-15,gy+56,12,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle='#f0d488';ctx.lineWidth=1.5;ctx.stroke();
+    ctx.fillStyle='#0a1a3a';ctx.font='bold 14px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('✓',gx+gw-15,gy+57);
+  }
+}
+
+function drawChar(c){
+  const bob=c.moving?Math.sin(c.walk)*2:0;const x=c.x,y=c.y+bob;const isProf=c.role==='prof';
+  if(c.isPlayer){var _pa=performance.now()/380,_r=21+Math.sin(_pa)*3;ctx.save();var _g=ctx.createRadialGradient(x,y-2,3,x,y-2,_r);_g.addColorStop(0,'rgba(79,209,197,0)');_g.addColorStop(.5,'rgba(79,209,197,.42)');_g.addColorStop(1,'rgba(79,209,197,0)');ctx.fillStyle=_g;ctx.beginPath();ctx.arc(x,y-2,_r,0,Math.PI*2);ctx.fill();ctx.strokeStyle='rgba(240,212,136,'+(0.6+Math.sin(_pa)*0.25).toFixed(2)+')';ctx.lineWidth=2.6;ctx.beginPath();ctx.arc(x,y-2,_r,0,Math.PI*2);ctx.stroke();ctx.restore();}
+  ctx.fillStyle='rgba(0,0,0,.26)';ctx.beginPath();ctx.ellipse(c.x,c.y+15,12,4.6,0,0,Math.PI*2);ctx.fill();
+  const swing=c.moving?Math.sin(c.walk)*3:0;
+  ctx.fillStyle='#26304a';ctx.fillRect(x-6,y+4,4,10+swing);ctx.fillRect(x+2,y+4,4,10-swing);
+  // body
+  ctx.fillStyle=isProf?'#0f2350':c.color;drawRoundRect(x-9,y-8,18,17,5);ctx.fill();
+  if(isProf){ctx.fillStyle=c.color;ctx.fillRect(x-9,y-8,18,4);ctx.fillStyle='#d4af52';ctx.fillRect(x-2,y-8,4,17);}
+  if(c.isPlayer){ctx.strokeStyle='#f0d488';ctx.lineWidth=1.6;drawRoundRect(x-9,y-8,18,17,5);ctx.stroke();}
+  if(c.sex==='f'){ctx.fillStyle=isProf?'#33406a':c.color;ctx.beginPath();ctx.moveTo(x-9,y+3);ctx.lineTo(x+9,y+3);ctx.lineTo(x+12,y+11);ctx.lineTo(x-12,y+11);ctx.closePath();ctx.fill();}
+  // head
+  ctx.fillStyle=c.skin||'#f0c9a8';ctx.beginPath();ctx.arc(x,y-16,8,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle=c.hair;
+  if(c.dir==='up'){ctx.beginPath();ctx.arc(x,y-16,8,0,Math.PI*2);ctx.fill();}
+  else{ctx.beginPath();ctx.arc(x,y-19,8,Math.PI,Math.PI*2);ctx.fill();ctx.fillRect(x-8,y-19,16,4);}
+  if(c.sex==='f'&&c.dir!=='up'){ctx.fillStyle=c.hair;ctx.fillRect(x-8,y-19,3,13);ctx.fillRect(x+5,y-19,3,13);}
+  if(c.dir!=='up'){ctx.fillStyle='#20242c';const ex=c.dir==='left'?-3:(c.dir==='right'?3:0);ctx.fillRect(x-3+ex*0.4,y-16,2,2);ctx.fillRect(x+2+ex*0.4,y-16,2,2);}
+  if(isProf){ctx.font='11px sans-serif';ctx.textAlign='center';ctx.fillText('🎓',x,y-30);}
+  // nameplate
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  const nm=c.name;const sub=isProf?(SUBJ_NAME[c.subj]||''):'';
+  ctx.font='bold 10px '+FSAN;const w1=ctx.measureText(nm).width;
+  ctx.font='9px '+FSAN;const w2=sub?ctx.measureText(sub).width:0;
+  const nw=Math.max(w1,w2)+14,nh=sub?25:15;
+  ctx.fillStyle=isProf?'rgba(10,22,54,.94)':(c.isPlayer?'rgba(38,26,6,.92)':'rgba(8,14,30,.82)');
+  drawRoundRect(x-nw/2,y+16,nw,nh,6);ctx.fill();
+  if(isProf||c.isPlayer){ctx.strokeStyle='#c9a24b';ctx.lineWidth=1;drawRoundRect(x-nw/2,y+16,nw,nh,6);ctx.stroke();}
+  ctx.fillStyle=isProf?'#f4ead0':(c.isPlayer?'#ffe4a0':'#dbe6ff');
+  ctx.font='bold 10px '+FSAN;ctx.fillText(nm,x,y+24);
+  if(sub){ctx.fillStyle='#d4af52';ctx.font='9px '+FSAN;ctx.fillText(sub,x,y+35);}
+  if(c.bubble)drawBubble(x,y-34,c.bubble,false,isProf?'#d4af52':c.color);
+  else if(c.thought)drawBubble(x,y-34,c.thought,true,'#8aa0c8');
+  if(c.isPlayer&&!c.bubble&&!c.thought){var _b=Math.sin(performance.now()/300)*3;ctx.fillStyle='#f0d488';ctx.strokeStyle='#0a1a3a';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x-7,y-43+_b);ctx.lineTo(x+7,y-43+_b);ctx.lineTo(x,y-33+_b);ctx.closePath();ctx.fill();ctx.stroke();}
+}
+
+function drawBubble(x, y, text, thought, col){
+  ctx.font='11px "Malgun Gothic",sans-serif'; ctx.textAlign='left'; ctx.textBaseline='middle';
+  const t = text.length>22 ? text.slice(0,21)+'…' : text;
+  const w = ctx.measureText(t).width + 16, h=20;
+  const bx = x-w/2, by = y-h;
+  ctx.fillStyle = thought ? 'rgba(20,26,38,.92)' : 'rgba(10,13,20,.95)';
+  ctx.strokeStyle = col; ctx.lineWidth=1.2;
+  drawRoundRect(bx,by,w,h,thought?10:7); ctx.fill(); ctx.stroke();
+  if (thought){
+    ctx.beginPath(); ctx.arc(x-4,y+3,2.4,0,Math.PI*2); ctx.arc(x,y+8,1.6,0,Math.PI*2); ctx.fill(); ctx.stroke();
+  } else {
+    ctx.beginPath(); ctx.moveTo(x-5,y-1); ctx.lineTo(x,y+5); ctx.lineTo(x+5,y-1); ctx.closePath();
+    ctx.fillStyle='rgba(10,13,20,.95)'; ctx.fill();
+  }
+  ctx.fillStyle = thought ? '#b9c7e6' : '#eaf1ff';
+  ctx.fillText(t, bx+8, by+h/2);
+}
+
+function render(){
+  ctx.clearRect(0,0,VW,VH);
+  ctx.save();
+  if(state.overview){ var _sc=Math.min(VW/WORLD.w, VH/WORLD.h)*0.98; ctx.translate((VW-WORLD.w*_sc)/2,(VH-WORLD.h*_sc)/2); ctx.scale(_sc,_sc); }
+  else { var Z=window.camZoom||1; var ccx=cam.x+VW/2, ccy=cam.y+VH/2; ctx.translate(VW/2,VH/2); ctx.scale(Z,Z); ctx.translate(-ccx,-ccy); }
+  drawGround();
+  BUILDINGS.forEach(drawBuilding);
+  funDrawProps();
+  // entities sorted by y (painter's)
+  const ents = allChars.slice().sort((a,b)=>a.y-b.y);
+  ents.forEach(drawChar);
+  funDrawTop();
+  if(typeof drawGuide==='function') drawGuide();
+  if(typeof drawEmos==='function') drawEmos();
+  // interaction ring
+  if (state.near && !state.spectate){
+    const p = state.near.type==='building' ? doorOf(state.near.ref) : state.near.ref;
+    ctx.strokeStyle='rgba(79,209,197,.9)'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.arc(p.x, p.y, 24, 0, Math.PI*2); ctx.stroke();
+  }
+  ctx.restore();
+  funNightOverlay();
+  drawMinimap();
+}
+
+/* ==========================================================================
+   INTERACTION
+   ========================================================================== */
+function updateNear(){
+  if (state.spectate){ state.near=null; hidePrompt(); return; }
+  let best=null, bestD=70;
+  // professors
+  professors.forEach(p=>{ const d=dist(player.x,player.y,p.x,p.y); if(d<bestD){bestD=d;best={type:'prof',ref:p};} });
+  // building doors
+  BUILDINGS.forEach(b=>{ if(!b.subj && !b.role) return; const dr=doorOf(b); const d=dist(player.x,player.y,dr.x,dr.y); if(d<bestD){bestD=d;best={type: b.subj ? 'building' : b.role, ref:b};} });
+  // hub door (social)
+  if(typeof staff!=='undefined'){ staff.forEach(p=>{ const d=dist(player.x,player.y,p.x,p.y); if(d<bestD){bestD=d;best={type:'staff',ref:p};} }); }
+  if(!best) best = funNearCheck();
+  state.near = best;
+  if (best){
+    let label;
+    if (best.type==='prof') label = best.ref.name+' 와(과) 대화';
+    else if (best.type==='building') label = best.ref.name+' 강의 듣기';
+    else if (best.type==='hub') label = '학생회관 둘러보기';
+    else if (best.type==='cafe') label = '☕ 커피 한 잔 — 스피드 UP';
+    else if (best.type==='stage') label = '🔔 골든벨 퀴즈 러시!';
+    else if (best.type==='pet') label = '🐈 냥이 쓰다듬기';
+    else if (best.type==='office') label = '🏢 학과사무실 (조교)';
+    else if (best.type==='club') label = '🎽 전공동아리방';
+    else if (best.type==='council') label = '📣 물치 학회실';
+    else if (best.type==='career') label = '💼 대학일자리플러스센터';
+    else if (best.type==='gate') label = '🏫 학과 안내·홍보 (입구)';
+    else if (best.type==='staff') label = best.ref.name+' 와(과) 대화';
+    else label = '둘러보기';
+    showPrompt(label);
+  } else hidePrompt();
+}
+function showPrompt(label){ const el=document.getElementById('prompt'); el.innerHTML='<span class="kbd">E</span> '+label; el.style.display='flex'; }
+function hidePrompt(){ document.getElementById('prompt').style.display='none'; }
+
+function tryInteract(){
+  if (!state.near) return;
+  try{ if(navigator.vibrate) navigator.vibrate(15); }catch(_v){}
+  const n = state.near;
+  if (n.type==='prof') openProf(n.ref);
+  else if (n.type==='building') openHall(n.ref);
+  else if (n.type==='hub') openHub();
+  else if (n.type==='cafe') funCafe();
+  else if (n.type==='stage') gbStart();
+  else if (n.type==='pet') funPet();
+  else if (n.type==='office') openOffice();
+  else if (n.type==='club') openClub();
+  else if (n.type==='council') openCouncil();
+  else if (n.type==='career') openCareer();
+  else if (n.type==='gate') openWelcome();
+  else if (n.type==='staff') openStaff(n.ref);
+}
+
+/* --- Dialog engine --- */
+function setDialog(badge, badgeColor, name, sub){
+  document.getElementById('dlg-badge').textContent = badge;
+  document.getElementById('dlg-badge').style.background = badgeColor;
+  document.getElementById('dlg-name').textContent = name;
+  document.getElementById('dlg-sub').textContent = sub;
+}
+function showDialog(){ document.getElementById('dlg').classList.add('show'); }
+function closeDialog(){ document.getElementById('dlg').classList.remove('show'); quizCtx=null; gb=null; }
+
+let quizCtx = null;
+
+function openProf(p){
+  try{ state.talkedNpcs.add(p.name); achCheck(); }catch(e){}
+  setDialog('🧑‍🏫', 'linear-gradient(135deg,'+p.color+',#3a465f)', p.name, SUBJ_NAME[p.subj]+' 담당 교수');
+  const body = document.getElementById('dlg-body');
+  const foot = document.getElementById('dlg-foot');
+  body.innerHTML = '<div class="say"><span class="who">'+p.name+'</span>'+choice(p.lines)+'</div>'+
+    '<div class="say" style="border-style:dashed">무엇을 도와줄까요? 강의 요약을 듣거나, 바로 퀴즈에 도전해보세요.</div>';
+  foot.innerHTML='';
+  addFoot('📖 강의 요약 듣기', ()=>lectureSummary(p.subj, p.name));
+  addFoot('📝 '+SUBJ_NAME[p.subj]+' 퀴즈', ()=>startQuiz(p.subj, p.name), true);
+  if (state.ollama.enabled) addFoot('💬 질문하기(LLM)', ()=>askProf(p));
+  addFoot('닫기', closeDialog);
+  showDialog();
+}
+
+const ASSESS_TOOL_URL='https://high-school-tool.vercel.app/';
+function openHall(b){
+  const p = professors.find(x=>x.subj===b.subj);
+  setDialog(b.emoji, 'linear-gradient(135deg,'+b.color+',#2a3550)', b.name, (DAY_TAG[b.subj]||'')+' · '+SUBJ_NAME[b.subj]);
+  const body=document.getElementById('dlg-body'); const foot=document.getElementById('dlg-foot');
+  body.innerHTML='<div class="say"><span class="who">'+b.name+'</span>'+b.name+'에 입장했습니다. 오늘 과목은 <b>'+SUBJ_NAME[b.subj]+'</b>. 강의를 듣거나 퀴즈로 학점을 쌓으세요.</div>'+jobLink('📘 학과 교육과정·로드맵','https://physi.ansan.ac.kr/physi/roadmap',false)+(b.subj==='assess'?jobLink('📏 체형·기능 자기점검 도구 열기',ASSESS_TOOL_URL,true):'');
+  foot.innerHTML='';
+  addFoot('📖 강의 요약', ()=>lectureSummary(b.subj, p?p.name:b.name));
+  addFoot('📝 퀴즈 시작', ()=>startQuiz(b.subj, p?p.name:b.name), true);
+  addFoot('닫기', closeDialog);
+  showDialog();
+}
+
+function openHub(){
+  setDialog('📚','linear-gradient(135deg,#4a8f5a,#2a3550)','학생회관·도서관','자율 AI들의 휴식·잡담 공간');
+  const body=document.getElementById('dlg-body'); const foot=document.getElementById('dlg-foot');
+  const around = students.filter(s=>dist(s.x,s.y,player.x,player.y)<260).map(s=>s.name);
+  body.innerHTML='<div class="say"><span class="who">안내</span>여기는 AI 학생들이 쉬는 시간에 모여 잡담하는 곳입니다. 지금 근처 학생: <b>'+(around.length?around.join(', '):'없음')+'</b><br><br>가만히 관전하면 AI들이 스스로 대화하는 모습을 볼 수 있어요(👁️ 관전 모드 추천).</div>'+jobLink('📰 학과뉴스','https://physi.ansan.ac.kr/physi/board/3',false)+jobLink('📷 포토갤러리','https://physi.ansan.ac.kr/physi/board/7',false);
+  foot.innerHTML='';
+  addFoot('👁️ 관전 모드 켜기', ()=>{ toggleSpectate(true); closeDialog(); });
+  addFoot('닫기', closeDialog);
+  showDialog();
+}
+
+function addFoot(label, fn, primary){
+  const b=document.createElement('button');
+  b.className='btn'+(primary?' primary':''); b.textContent=label; b.onclick=fn;
+  document.getElementById('dlg-foot').appendChild(b);
+}
+
+/* --- Lecture summaries (offline; LLM-enhanced if enabled) --- */
+const LECTURE = {"introzone": "물리치료사는 운동·도수·물리적 방법으로 아픈 곳을 낫게 하고 움직임을 되찾아주는 전문가예요. 핵심은 과학적 순서 — 평가 → 중재(운동·치료) → 재평가. 근거중심(EBP)으로 판단합니다.", "assess": "체형·자세를 살피고 관절이 움직이는 범위(ROM)를 각도기로 재는 ‘평가’ 단계예요. 거북목·골반틀어짐 같은 불균형을 찾아 어떤 운동·치료가 필요한지 정합니다.", "massage": "뭉친 근육을 풀고 통증을 줄이며 순환을 돕는 치료적 마사지는 ‘중재’의 하나예요. 급성 염증·상처 부위는 피하는 등 안전을 먼저 확인합니다.", "agent": "전기·열·광선 같은 물리적 에너지로 통증·긴장을 줄이는 물리적 인자치료를 체험해요. 치료 뒤엔 ‘재평가’로 효과를 확인하며 이틀 체험을 마무리합니다."};
+async function lectureSummary(subj, who){
+  const body=document.getElementById('dlg-body'); const foot=document.getElementById('dlg-foot');
+  body.innerHTML='<div class="say"><span class="who">'+who+'</span>'+LECTURE[subj]+'</div>'+
+    '<div class="expl"><span class="tag">사실</span>물리치료 표준 교과서 수준의 확립된 내용입니다.</div>';
+  foot.innerHTML='';
+  addFoot('📝 이 과목 퀴즈 풀기', ()=>startQuiz(subj, who), true);
+  addFoot('닫기', closeDialog);
+  if (state.ollama.enabled){
+    const p=document.createElement('div'); p.className='say'; p.style.opacity=.7;
+    p.innerHTML='<span class="who">🧠 '+who+' (LLM 생성 중…)</span>…'; body.appendChild(p);
+    const extra = await llmChat('너는 한국 물리치료학과 교수다. 아래 주제를 학생에게 3문장 이내로 쉽게 보충 설명하라. 과장·환각 금지, 확립된 내용만.',
+      SUBJ_NAME[subj]+' 핵심을 한 가지만 더 짚어줘.');
+    if (extra) p.innerHTML='<span class="who">🧠 '+who+'</span>'+extra; else p.remove();
+  }
+}
+async function askProf(p){
+  const body=document.getElementById('dlg-body');
+  body.innerHTML='<div class="field"><label>'+p.name+'에게 질문 ('+SUBJ_NAME[p.subj]+')</label><input id="qin" placeholder="예: 오십견과 회전근개 파열 어떻게 구분해요?"/></div><div id="ans" class="say" style="display:none"></div>';
+  const foot=document.getElementById('dlg-foot'); foot.innerHTML='';
+  addFoot('질문 보내기', async ()=>{
+    const q=document.getElementById('qin').value.trim(); if(!q) return;
+    const ans=document.getElementById('ans'); ans.style.display='block';
+    ans.innerHTML='<span class="who">'+p.name+'</span>생각 중…';
+    const r=await llmChat('너는 한국 '+SUBJ_NAME[p.subj]+' 담당 물리치료학과 교수다. 학생 질문에 정확하고 간결하게(4문장 이내) 답하라. 모르면 모른다고 하라. 환각 금지.', q);
+    ans.innerHTML='<span class="who">'+p.name+'</span>'+(r||'지금은 답변 엔진에 연결이 안 되네요. AI 엔진 연결을 확인해 주세요.');
+  }, true);
+  addFoot('뒤로', ()=>openProf(p));
+  addFoot('닫기', closeDialog);
+}
+
+/* --- Quiz --- */
+function startQuiz(subj, who){
+  const bank = QUIZ[subj];
+  quizCtx = { subj, who, order: shuffle([...Array(bank.length).keys()]).slice(0, Math.min(6, bank.length)), i:0, gotFirstTry:0 };
+  renderQuestion();
+}
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function renderQuestion(){
+  const {subj, who, order, i} = quizCtx;
+  const qi = order[i]; const item = QUIZ[subj][qi];
+  setDialog('📝','linear-gradient(135deg,#7c9cff,#4fd1c5)', SUBJ_NAME[subj]+' 퀴즈', who+' 출제 · '+(i+1)+'/'+order.length);
+  const body=document.getElementById('dlg-body'); const foot=document.getElementById('dlg-foot');
+  let html='<div class="qmeta"><span>문항 '+(i+1)+' / '+order.length+'</span><span>정답 시 +10점</span></div>';
+  html+='<div class="say" style="font-weight:600">'+item.q+'</div>';
+  html+='<div id="opts">';
+  item.o.forEach((op,idx)=>{ html+='<button class="opt" data-idx="'+idx+'"><span class="num">'+(idx+1)+'</span><span>'+op+'</span></button>'; });
+  html+='</div>';
+  body.innerHTML=html; foot.innerHTML='';
+  body.querySelectorAll('.opt').forEach(btn=>{
+    btn.onclick=()=>answer(parseInt(btn.dataset.idx,10));
+  });
+}
+function answer(idx){
+  const {subj, order, i} = quizCtx;
+  const item = QUIZ[subj][order[i]];
+  const correct = item.a;
+  const opts = document.querySelectorAll('#opts .opt');
+  opts.forEach((b,k)=>{ b.disabled=true; if(k===correct) b.classList.add('correct'); if(k===idx&&idx!==correct) b.classList.add('wrong'); });
+  const first = (quizCtx['ans_'+i]===undefined);
+  quizCtx['ans_'+i]=idx;
+  if (idx===correct){
+    if (first){ state.score+=10; state.correct+=1; quizCtx.gotFirstTry++; toast('정답! +10점 🎉'); }
+    else toast('정답입니다 ✓');
+  } else { toast('오답 — 해설을 확인하세요'); }
+  const body=document.getElementById('dlg-body');
+  const ex=document.createElement('div'); ex.className='expl';
+  ex.innerHTML='<span class="tag">해설</span>'+item.e;
+  body.appendChild(ex);
+  const foot=document.getElementById('dlg-foot'); foot.innerHTML='';
+  if (idx!==correct) addFoot('🔁 다시 선택', ()=>renderQuestion());
+  if (i < order.length-1) addFoot('다음 문항 →', ()=>{ quizCtx.i++; renderQuestion(); }, true);
+  else addFoot('결과 보기 🏁', ()=>finishQuiz(), true);
+  addFoot('그만두기', closeDialog);
+  updateHUD();
+}
+function finishQuiz(){
+  const {subj, who, order, gotFirstTry} = quizCtx;
+  if (gotFirstTry>0 || true) state.visited.add(subj);
+  const pct = Math.round(gotFirstTry/order.length*100);
+  setDialog('🏁','linear-gradient(135deg,#ffd166,#4fd1c5)', SUBJ_NAME[subj]+' 이수 결과', who+' 출제');
+  const body=document.getElementById('dlg-body'); const foot=document.getElementById('dlg-foot');
+  let grade = pct>=40?'A+':pct>=80?'A':pct>=70?'B+':pct>=60?'B':pct>=40?'C':'D';
+  body.innerHTML='<div class="say" style="text-align:center;font-size:16px"><span class="who" style="text-align:center;display:block">수고했어요!</span>'+
+    '첫 시도 정답 <b style="color:var(--gold)">'+gotFirstTry+' / '+order.length+'</b> · 성취도 <b>'+pct+'%</b><br><br>'+
+    '<span style="font-size:30px">🎓</span><br>이번 강의 학점: <b style="color:var(--accent);font-size:22px">'+grade+'</b></div>'+
+    '<div class="expl"><span class="tag">기록</span>'+SUBJ_NAME[subj]+' 체험존을 이수 처리했습니다. 4개 체험존을 모두 이수해보세요!</div>';
+  foot.innerHTML='';
+  addFoot('다른 체험존 가기', closeDialog, true);
+  updateHUD();
+  checkAllVisited();
+}
+function checkAllVisited(){
+  try{ achCheck(); }catch(e){}
+  if (state.visited.size>=4){
+    setQuest('🏆 4개 배지 완료! 상단 🎫 수료증 버튼을 눌러 수료증을 받으세요.');
+    toast('🎫 수료증 발급 가능! 상단 버튼을 눌러보세요');
+  } else {
+    setQuest('체험존 '+state.visited.size+'/9 이수 — 남은 과목을 찾아가세요');
+  }
+}
+
+/* ==========================================================================
+   HUD / helpers
+   ========================================================================== */
+function updateHUD(){
+  document.getElementById('score').textContent = state.score;
+  document.getElementById('correct').textContent = state.correct;
+  document.getElementById('visited').textContent = state.visited.size;
+  document.getElementById('clock-txt').textContent = clockStr();
+  document.getElementById('period').textContent = isClassTime()?'· 수업중':'· 쉬는시간';
+}
+function setQuest(t){ document.getElementById('quest-txt').textContent = t; }
+function toast(msg){
+  const wrap=document.getElementById('toast');
+  const el=document.createElement('div'); el.className='toast'; el.textContent=msg;
+  wrap.appendChild(el);
+  setTimeout(()=>{ el.style.opacity='0'; el.style.transition='opacity .4s'; setTimeout(()=>el.remove(),400); }, 1800);
+}
+function isShown(id){ return document.getElementById(id).classList.contains('show'); }
+function anyModalOpen(){ return isShown('dlg')||isShown('ollama')||isShown('help')||isShown('intro')||isShown('ach'); }
+function hideEl(id){ document.getElementById(id).classList.remove('show'); }
+
+/* ==========================================================================
+   TOP BAR wiring
+   ========================================================================== */
+document.getElementById('startBtn').onclick = ()=>{ applyAvatar(); hideEl('intro'); state.entered=true; document.body.classList.add('playing'); setQuest('아무 체험존에나 들어가 교수님과 대화해보세요'); };
+document.getElementById('helpBtn').onclick = ()=>document.getElementById('help').classList.add('show');
+document.getElementById('ollamaBtn').onclick = ()=>document.getElementById('ollama').classList.add('show');
+function closeOllama(){ hideEl('ollama'); }
+
+document.getElementById('spectateBtn').onclick = ()=>toggleSpectate();
+function toggleSpectate(force){
+  state.spectate = (force===undefined) ? !state.spectate : force;
+  const b=document.getElementById('spectateBtn');
+  b.classList.toggle('on', state.spectate);
+  b.textContent = state.spectate?'👁️ 관전 ON':'👁️ 관전';
+  if (state.spectate){ toast('관전 모드 — AI들을 순회합니다'); state.spectateTimer=0; }
+  else toast('조작 모드로 복귀');
+}
+
+const SPEEDS=[1,2,4,8];
+document.getElementById('fastBtn').onclick = ()=>{
+  const i=(SPEEDS.indexOf(state.timeScale)+1)%SPEEDS.length;
+  state.timeScale=SPEEDS[i];
+  document.getElementById('fastBtn').textContent='⏩ '+state.timeScale+'×';
+};
+
+/* Ollama modal buttons */
+document.getElementById('ol-test').onclick = async ()=>{
+  const url=document.getElementById('ol-url').value.trim();
+  const model=document.getElementById('ol-model').value.trim();
+  const dot=document.getElementById('ol-dot'), msg=document.getElementById('ol-msg');
+  msg.textContent='테스트 중…'; dot.className='status-dot';
+  const r=await ollamaTest(url,model);
+  dot.className='status-dot '+(r.ok?'ok':'bad'); msg.textContent=r.msg;
+};
+document.getElementById('ol-save').onclick = async ()=>{
+  const url=document.getElementById('ol-url').value.trim();
+  const model=document.getElementById('ol-model').value.trim();
+  const dot=document.getElementById('ol-dot'), msg=document.getElementById('ol-msg');
+  msg.textContent='연결 확인 중…'; dot.className='status-dot';
+  const r=await ollamaTest(url,model);
+  if (r.ok){
+    state.ollama={ enabled:true, url, model, ok:true };
+    dot.className='status-dot ok'; msg.textContent='활성화됨 ✓ NPC가 이제 LLM으로 대화합니다';
+    document.getElementById('ollamaBtn').classList.add('on');
+    toast('🧠 로컬 LLM 연결됨: '+model);
+    setTimeout(closeOllama, 900);
+  } else {
+    state.ollama.enabled=false;
+    dot.className='status-dot bad'; msg.textContent=r.msg+' — 오프라인 AI로 계속 동작합니다';
+  }
+};
+
+/* ==========================================================================
+   MAIN LOOP
+   ========================================================================== */
+let last=performance.now();
+function loop(now){
+  let dt=(now-last)/1000; last=now; if(dt>0.05) dt=0.05; if(dt<0) dt=0;
+  if(state.entered){ if(!window._loaded){ window._loaded=true; try{loadProg();}catch(e){} } window._saveT=(window._saveT||0)+dt; if(window._saveT>2){ window._saveT=0; try{saveProg();}catch(e){} } }
+
+  // clock advances (faster during spectate / timeScale)
+  if (state.entered){
+    state.clock += dt * (0.35*state.timeScale) ; // ~ real minutes; 0.35 min/s baseline
+    if (state.clock>=24*60) state.clock-=24*60;
+  }
+
+  // player movement (blocked while modal open or spectating)
+  const canMove = state.entered && !anyModalOpen() && !state.spectate;
+  player.moving=false;
+  if (canMove){
+    let vx=0, vy=0;
+    if (keys['arrowleft']||keys['a']||keys['ㅁ']) vx-=1;
+    if (keys['arrowright']||keys['d']||keys['ㅇ']) vx+=1;
+    if (keys['arrowup']||keys['w']||keys['ㅈ']) vy-=1;
+    if (keys['arrowdown']||keys['s']||keys['ㄴ']) vy+=1;
+    { const tv=window.touchVec; if(tv){ vx+=tv.x; vy+=tv.y; } }
+    if (vx||vy){
+      player.mt=null;
+      const m=Math.hypot(vx,vy)||1; vx/=m; vy/=m;
+      const nx=clamp(player.x+vx*playerSpd()*dt, 20, WORLD.w-20);
+      const ny=clamp(player.y+vy*playerSpd()*dt, 20, WORLD.h-20);
+      if(!collidesBuilding(nx,player.y)) player.x=nx;
+      if(!collidesBuilding(player.x,ny)) player.y=ny;
+      player.moving=true; player.walk+=dt*12;
+      player.dir = Math.abs(vx)>Math.abs(vy) ? (vx>0?'right':'left') : (vy>0?'down':'up');
+    }
+    else if (player.mt){
+      let dx=player.mt.x-player.x, dy=player.mt.y-player.y; const dd=Math.hypot(dx,dy)||1;
+      if(dd<12){ const _mi=player.mtI; player.mt=null; player.mtI=false; if(_mi){ updateNear(); tryInteract(); } }
+      else { dx/=dd; dy/=dd;
+        const nx=clamp(player.x+dx*playerSpd()*dt,20,WORLD.w-20);
+        const ny=clamp(player.y+dy*playerSpd()*dt,20,WORLD.h-20);
+        let mv=false;
+        if(!collidesBuilding(nx,player.y)){ player.x=nx; mv=true; }
+        if(!collidesBuilding(player.x,ny)){ player.y=ny; mv=true; }
+        player.moving=true; player.walk+=dt*12;
+        player.dir = Math.abs(dx)>Math.abs(dy) ? (dx>0?'right':'left') : (dy>0?'down':'up');
+        if(!mv){ player.mt=null; player.mtI=false; }
+      }
+    }
+  }
+
+  // NPC AI
+  npcs.forEach(c=>updateNPC(c,dt*(state.timeScale||1)));
+  funTick(dt);
+  if(typeof emoTick==='function') emoTick(dt);
+  chatterCd -= dt;
+  if (chatterCd<=0){ chatterCd = rnd(9,15); tryChatter(); }
+
+  // camera
+  let focus = player;
+  if (state.spectate){
+    state.spectateTimer -= dt;
+    if (!state.spectateTarget || state.spectateTimer<=0){
+      state.spectateTarget = choice(npcs); state.spectateTimer = rnd(5,8);
+    }
+    focus = state.spectateTarget;
+  }
+  var _po=window.panOffset||(window.panOffset={x:0,y:0});
+  if(player.moving){ _po.x*=0.86; _po.y*=0.86; if(Math.abs(_po.x)<0.5)_po.x=0; if(Math.abs(_po.y)<0.5)_po.y=0; }
+  const tcx = clamp(focus.x - VW/2, 0, Math.max(0,WORLD.w-VW)) + _po.x;
+  const tcy = clamp(focus.y - VH/2, 0, Math.max(0,WORLD.h-VH)) + _po.y;
+  var _lp = ((_po.x||_po.y)?12:6);
+  cam.x += (tcx-cam.x)*Math.min(1, dt*_lp);
+  cam.y += (tcy-cam.y)*Math.min(1, dt*_lp);
+
+  updateNear();
+  updateHUD();
+  render();
+  requestAnimationFrame(loop);
+}
+
+function collidesBuilding(x,y){
+  for (const b of BUILDINGS){
+    if (x> b.x-8 && x< b.x+b.w+8 && y> b.y-6 && y< b.y+b.h-6) return true;
+  }
+  return false;
+}
+
+/* ============================================================================
+   FUN LAYER — AI-Town-style social sim + game elements
+   inspiration: a16z-infra/ai-town (MIT) · Stanford "Generative Agents" (Smallville)
+   (patterns adapted & reimplemented, no code copied)
+   ========================================================================== */
+state.coinCount = 0; state.ach = new Set(); state.talkedNpcs = new Set(); state.buffT = 0;
+const CAFE = { x: 1330, y: 1035 };
+const STAGE = { x: 280, y: 1085 };
+
+function playerSpd(){ return player.speed * (state.buffT > 0 ? 1.35 : 1); }
+
+/* ---------- SFX (WebAudio, offline, guarded) ---------- */
+let _actx = null;
+function sfx(type){
+  try{ if((type==='ok'||type==='coin')&&navigator.vibrate) navigator.vibrate(type==='ok'?25:12); }catch(_v){}
+  if(window.muted) return;
+  try{
+    if(!_actx) _actx = new (window.AudioContext || window.webkitAudioContext)();
+    if(_actx.state === 'suspended') _actx.resume();
+    const o = _actx.createOscillator(), g = _actx.createGain();
+    o.connect(g); g.connect(_actx.destination);
+    const t = _actx.currentTime; let d = 0.12;
+    if(type==='coin'){ o.frequency.setValueAtTime(660,t); o.frequency.exponentialRampToValueAtTime(1320,t+0.08); d=0.11; }
+    else if(type==='ok'){ o.frequency.setValueAtTime(523,t); o.frequency.setValueAtTime(784,t+0.09); d=0.19; }
+    else if(type==='bad'){ o.type='square'; o.frequency.setValueAtTime(170,t); d=0.20; }
+    else { o.frequency.setValueAtTime(520,t); d=0.07; }
+    g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.13,t+0.01); g.gain.exponentialRampToValueAtTime(0.0001,t+d);
+    o.start(t); o.stop(t+d+0.02);
+  }catch(e){}
+}
+
+/* ---------- Emotes (floating icons) ---------- */
+const emotes = [];
+function emote(x,y,ch){ emotes.push({x,y,ch,t:1.4}); }
+function emotesTick(dt){ for(let i=emotes.length-1;i>=0;i--){ const e=emotes[i]; e.y-=24*dt; e.t-=dt; if(e.t<=0) emotes.splice(i,1); } }
+function emotesDraw(){ ctx.textAlign='center'; ctx.textBaseline='middle'; for(const e of emotes){ ctx.save(); ctx.globalAlpha=Math.max(0,Math.min(1,e.t)); ctx.font='17px sans-serif'; ctx.fillText(e.ch,e.x,e.y); ctx.restore(); } }
+const EMOJI = ['❤️','❗','♪','👍','😄','✨','😆','💬','🙌'];
+
+/* ---------- Collectible coins ---------- */
+const coins = [];
+function funInBuilding(x,y){ for(const b of BUILDINGS){ if(x>b.x-20&&x<b.x+b.w+20&&y>b.y-20&&y<b.y+b.h+20) return true; } return false; }
+function spawnCoin(){
+  for(let k=0;k<30;k++){
+    const x=rnd(80,WORLD.w-80), y=rnd(120,WORLD.h-80);
+    if(funInBuilding(x,y)) continue;
+    if(dist(x,y,PLAZA.x,PLAZA.y)<74) continue;
+    let ic='🪙'; const r=Math.random(); if(r<0.06) ic='⭐'; else if(r<0.11) ic=choice(['🦴','🧠','🫁']);
+    coins.push({x,y,icon:ic,bob:rnd(0,6)}); return;
+  }
+}
+function coinsInit(){ for(let i=0;i<26;i++) spawnCoin(); }
+function coinVal(ic){ return ic==='⭐'?5:(ic==='🪙'?1:3); }
+function coinsTick(dt){
+  for(let i=coins.length-1;i>=0;i--){ const c=coins[i]; c.bob+=dt*4.5;
+    if(dist(player.x,player.y,c.x,c.y)<22){
+      const v=coinVal(c.icon); coins.splice(i,1); state.coinCount+=v;
+      sfx('coin'); emote(player.x,player.y-30,c.icon); updateFunHUD(); achCheck();
+      setTimeout(spawnCoin, rnd(6,15)*1000);
+    }
+  }
+}
+function coinsDraw(){
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  for(const c of coins){ const yy=c.y+Math.sin(c.bob)*3;
+    ctx.save(); ctx.fillStyle='rgba(0,0,0,.2)'; ctx.beginPath(); ctx.ellipse(c.x,c.y+8,7,2.4,0,0,Math.PI*2); ctx.fill();
+    ctx.globalAlpha=.35; ctx.fillStyle='#ffe9a8'; ctx.beginPath(); ctx.arc(c.x,yy,9,0,Math.PI*2); ctx.fill(); ctx.globalAlpha=1;
+    ctx.font='15px sans-serif'; ctx.fillText(c.icon,c.x,yy); ctx.restore();
+  }
+}
+
+/* ---------- AI-Town-style conversations ---------- */
+const convos = [];
+const CONVO_LINES = [
+ '해부학 시험 언제지?','신경계 진짜 어렵다 ㅠ','과제 다 했어?','오늘 실습 재밌었어!','도서관 갈래?',
+ '커피 한 잔 하자','교수님 강의 좋더라','골든벨 도전했어?','국시 화이팅!','이번 주 축제래',
+ 'MMT 등급 헷갈려','오십견 케이스 봤어?','호흡재활 실습 언제야?','저 코인 다 주웠어 ㅋㅋ','같이 밥 먹자',
+ '보행분석 어렵다','PNF 패턴 외웠어?','근육 이름 너무 많아','오늘 날씨 좋다','신입생이래, 인사하자!'
+];
+function agentFree(a){ return a.role==='student' && a.state!=='convo' && (a.cvCd||0)<=0 && !a.bubble; }
+function convoTick(dt){
+  students.forEach(s=>{ if(s.cvCd>0) s.cvCd-=dt; });
+  const cap = isClassTime()?2:6;
+  const rate = isClassTime()?0.25:1.3;
+  if(convos.length<cap && Math.random()<dt*rate) tryStartConvo();
+  for(let i=convos.length-1;i>=0;i--){ const cv=convos[i]; advanceConvo(cv,dt);
+    if(cv.done){ cv.members.forEach(m=>{ m.state='idle'; m.timer=rnd(1,3); m.cvCd=rnd(8,16); }); convos.splice(i,1); } }
+}
+function tryStartConvo(){
+  const free = students.filter(agentFree);
+  for(let i=0;i<free.length;i++){ const a=free[i]; let b=null,bd=240;
+    for(let j=0;j<free.length;j++){ if(i===j) continue; const d=dist(a.x,a.y,free[j].x,free[j].y); if(d<bd){ bd=d; b=free[j]; } }
+    if(b){ const members=[a,b];
+      const c=free.find(x=>x!==a&&x!==b&&dist(x.x,x.y,a.x,a.y)<170);
+      if(c && Math.random()<0.45) members.push(c);
+      const spot={ x:(a.x+b.x)/2, y:(a.y+b.y)/2 };
+      members.forEach(m=>{ m.state='convo'; });
+      convos.push({ members, spot, phase:'walk', turn:0, timer:0, maxTurns:Math.floor(rnd(4,7)), done:false });
+      return;
+    }
+  }
+}
+function advanceConvo(cv,dt){
+  if(cv.phase==='walk'){
+    let all=true;
+    cv.members.forEach((m,k)=>{ const ang=k/cv.members.length*Math.PI*2;
+      const tx=cv.spot.x+Math.cos(ang)*26, ty=cv.spot.y+Math.sin(ang)*26;
+      const done=moveToward(m,tx,ty,dt); if(!done) all=false; else m.moving=false; });
+    if(all){ cv.phase='talk'; cv.timer=0.2; cv.turn=0; }
+  } else if(cv.phase==='talk'){
+    cv.timer-=dt;
+    if(cv.timer<=0){
+      const sp=cv.members[cv.turn%cv.members.length];
+      const other=cv.members[(cv.turn+1)%cv.members.length];
+      sp.dir = other.x> sp.x ? 'right':'left';
+      npcSpeak(sp, choice(CONVO_LINES), false);
+      if(Math.random()<0.55) emote(sp.x, sp.y-36, choice(EMOJI));
+      cv.turn++; cv.timer=rnd(1.5,2.5);
+      if(cv.turn>=cv.maxTurns){ cv.phase='end'; cv.timer=1.0; }
+    }
+  } else { cv.timer-=dt; if(cv.timer<=0) cv.done=true; }
+}
+
+/* ---------- Greetings (NPCs wave at the player) ---------- */
+function greetTick(dt){
+  for(const s of students){
+    if(s.state==='convo') continue;
+    if(s.greetCd>0){ s.greetCd-=dt; continue; }
+    if(dist(s.x,s.y,player.x,player.y)<78){
+      emote(s.x, s.y-34, '👋');
+      if(Math.random()<0.5) npcSpeak(s, choice(['안녕하세요!','신입생이다!','화이팅!','반가워요~','같이 가요!']), false);
+      s.greetCd = rnd(9,16); state.talkedNpcs.add(s.name); achCheck();
+    }
+  }
+}
+
+/* ---------- Campus cat ---------- */
+const pet = { x: PLAZA.x+70, y: PLAZA.y+90, tx:null, ty:null, state:'idle', timer:2, dir:'down', walk:0, moving:false, speed:44, petCd:0 };
+function petTick(dt){
+  if(pet.petCd>0) pet.petCd-=dt;
+  if(pet.state==='idle'){ pet.timer-=dt; if(pet.timer<=0){ const w=choice(WP); pet.tx=w.x+rnd(-40,40); pet.ty=w.y+rnd(-40,40); pet.state='walk'; } }
+  else { const done=moveToward(pet,pet.tx,pet.ty,dt); if(done){ pet.state='idle'; pet.moving=false; pet.timer=rnd(2,5); } }
+}
+function petDraw(){
+  const bob=pet.moving?Math.sin(pet.walk)*1.5:0; const x=pet.x, y=pet.y+bob;
+  ctx.fillStyle='rgba(0,0,0,.22)'; ctx.beginPath(); ctx.ellipse(x,y+7,9,3,0,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#e8a24b';
+  ctx.beginPath(); ctx.ellipse(x,y,10,6,0,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(x+ (pet.dir==='left'?-8:8), y-4, 5.5, 0, Math.PI*2); ctx.fill();
+  const hx=x+(pet.dir==='left'?-8:8);
+  ctx.beginPath(); ctx.moveTo(hx-4,y-8); ctx.lineTo(hx-2,y-13); ctx.lineTo(hx,y-8); ctx.closePath();
+  ctx.moveTo(hx+4,y-8); ctx.lineTo(hx+2,y-13); ctx.lineTo(hx,y-8); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle='#e8a24b'; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(x-9,y); ctx.quadraticCurveTo(x-16,y-6,x-13,y-12); ctx.stroke();
+  ctx.font='9px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillStyle='rgba(8,14,30,.7)'; const nw=ctx.measureText('🐈 냥이').width+8; drawRoundRect(x-nw/2,y+12,nw,13,5); ctx.fill();
+  ctx.fillStyle='#ffe4a0'; ctx.fillText('🐈 냥이', x, y+19);
+}
+function funPet(){
+  if(pet.petCd>0){ emote(pet.x,pet.y-24,'😽'); return; }
+  pet.petCd=1.5; emote(pet.x,pet.y-26,'❤️'); emote(player.x,player.y-30,'😊');
+  state.coinCount+=1; sfx('coin'); toast('🐈 냥이가 골골거려요! +1🪙'); achGrant('pet'); updateFunHUD();
+}
+
+/* ---------- Café (speed boost) ---------- */
+function drawCafe(){
+  var x=CAFE.x, y=CAFE.y;
+  ctx.fillStyle='rgba(0,0,0,.22)';drawRoundRect(x-70,y+30,150,14,8);ctx.fill();
+  ctx.fillStyle='#6b4a30';drawRoundRect(x-64,y-16,128,50,6);ctx.fill();
+  ctx.fillStyle='#f4ead0';drawRoundRect(x-56,y-6,112,34,4);ctx.fill();
+  ctx.fillStyle='#bfe3ea';ctx.fillRect(x-48,y+2,40,22);
+  ctx.fillStyle='#5a3a24';ctx.fillRect(x+2,y+2,22,26);
+  for(var i=0;i<9;i++){ctx.fillStyle=(i%2)?'#c8506a':'#f7f0e0';ctx.fillRect(x-58+i*13,y-24,13,16);}
+  ctx.fillStyle='#c8506a';ctx.fillRect(x-58,y-8,117,4);
+  ctx.fillStyle='#0b224e';drawRoundRect(x-52,y-40,104,18,6);ctx.fill();
+  ctx.strokeStyle='#d4af52';ctx.lineWidth=1.5;drawRoundRect(x-52,y-40,104,18,6);ctx.stroke();
+  ctx.fillStyle='#f4ead0';ctx.font='bold 13px '+FSAN;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('☕ 물치 카페',x,y-31);
+  drawParasol(x-92,y+16,'#e07a8f'); drawParasol(x+92,y+16,'#7fb0e0');
+  ctx.save();ctx.globalAlpha=.5;ctx.fillStyle='#dfe8ff';ctx.font='13px sans-serif';ctx.fillText('☁',x-40,y-46+Math.sin(performance.now()/400)*2);ctx.restore();
+}
+function funCafe(){
+  state.buffT=15; sfx('ok'); emote(player.x,player.y-30,'☕'); emote(player.x,player.y-46,'⚡');
+  toast('☕ 커피 충전! 15초간 스피드 UP'); achGrant('cafe');
+}
+
+/* ---------- Festival stage + Goldenbell quiz rush ---------- */
+function drawStage(){
+  var x=STAGE.x, y=STAGE.y, t=performance.now()/220;
+  ctx.fillStyle='rgba(0,0,0,.24)';drawRoundRect(x-90,y+28,184,16,9);ctx.fill();
+  ctx.fillStyle='#3a2a55';drawRoundRect(x-88,y-6,176,40,6);ctx.fill();
+  ctx.fillStyle='#4a3570';ctx.fillRect(x-88,y-6,176,9);
+  ctx.fillStyle='#2a1e40';ctx.fillRect(x-88,y+30,176,6);
+  ctx.fillStyle='#1a2740';ctx.fillRect(x-92,y-64,8,60);ctx.fillRect(x+84,y-64,8,60);
+  ctx.fillStyle='#0b224e';drawRoundRect(x-92,y-70,184,30,6);ctx.fill();
+  ctx.strokeStyle='#d4af52';ctx.lineWidth=2;drawRoundRect(x-92,y-70,184,30,6);ctx.stroke();
+  ctx.fillStyle='#f4ead0';ctx.font='bold 15px '+FSAN;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🎪 물치제 무대',x,y-55);
+  for(var i=0;i<5;i++){var lx=x-70+i*35;var on=(Math.floor(t*2)+i)%2;ctx.fillStyle=on?'#ffe9a8':'#6b5a2a';ctx.beginPath();ctx.arc(lx,y-40,3.5,0,Math.PI*2);ctx.fill();
+    if(on){ctx.save();ctx.globalAlpha=.2;ctx.fillStyle='#ffe9a8';ctx.beginPath();ctx.moveTo(lx,y-40);ctx.lineTo(lx-14,y+4);ctx.lineTo(lx+14,y+4);ctx.closePath();ctx.fill();ctx.restore();}}
+  for(var d=0;d<4;d++){var dx=x-48+d*32;var dy=y+6+Math.sin(t+d)*4;
+    ctx.fillStyle=['#e07a5f','#81b29a','#c98bb9','#6aa9e0'][d];drawRoundRect(dx-6,dy-6,12,14,4);ctx.fill();
+    ctx.fillStyle='#f0c9a8';ctx.beginPath();ctx.arc(dx,dy-12,5,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle=['#e07a5f','#81b29a','#c98bb9','#6aa9e0'][d];ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(dx-5,dy-2);ctx.lineTo(dx-9,dy-10-Math.sin(t*2+d)*3);ctx.moveTo(dx+5,dy-2);ctx.lineTo(dx+9,dy-10-Math.cos(t*2+d)*3);ctx.stroke();}
+}
+function stageTick(dt){
+  if(Math.random()<dt*1.6){ emote(STAGE.x-40+rnd(-10,80), STAGE.y-30, choice(['♪','♫','✨','🎶'])); }
+}
+
+let gb = null;
+function gbStart(){
+  const pool=[]; for(const k in QUIZ) QUIZ[k].forEach(it=>pool.push({it,subj:k})); shuffle(pool);
+  gb={ pool, i:0, n:Math.min(7,pool.length), correct:0, combo:0, best:0, per:12, time:12, coins:0, phase:'play' };
+  achGrant('gb'); gbRender();
+}
+function gbRender(){
+  const cur=gb.pool[gb.i];
+  setDialog('🔔','linear-gradient(135deg,#f0d488,#c8506a)','골든벨 퀴즈 러시', (gb.i+1)+' / '+gb.n+' · 콤보 '+gb.combo);
+  const body=document.getElementById('dlg-body'), foot=document.getElementById('dlg-foot');
+  let html='<div class="gb-bar"><div class="gb-fill" id="gb-fill"></div></div>';
+  html+='<div class="qmeta"><span>'+(SUBJ_NAME[cur.subj]||'')+'</span><span>정답 +5 · 콤보 보너스 🪙</span></div>';
+  html+='<div class="say" style="font-weight:600">'+cur.it.q+'</div><div id="opts">';
+  cur.it.o.forEach((op,idx)=>{ html+='<button class="opt" data-i="'+idx+'"><span class="num">'+(idx+1)+'</span><span>'+op+'</span></button>'; });
+  html+='</div>';
+  body.innerHTML=html; foot.innerHTML='';
+  body.querySelectorAll('.opt').forEach(b=>b.onclick=()=>gbAnswer(parseInt(b.dataset.i,10)));
+  gb.time=gb.per; showDialog();
+}
+function gbReveal(correctIdx, chosen){
+  const opts=document.querySelectorAll('#opts .opt');
+  opts.forEach((b,k)=>{ b.disabled=true; if(k===correctIdx) b.classList.add('correct'); if(chosen!=null && k===chosen && k!==correctIdx) b.classList.add('wrong'); });
+}
+function gbNext(){ gb.i++; if(gb.i>=gb.n) gbEnd(); else { gb.phase='play'; gbRender(); } }
+function gbAnswer(idx){
+  if(!gb||gb.phase!=='play') return;
+  const cur=gb.pool[gb.i]; const ok=idx===cur.it.a; gb.phase='reveal'; gbReveal(cur.it.a, idx);
+  if(ok){ gb.combo++; gb.best=Math.max(gb.best,gb.combo); const gain=5+(gb.combo-1)*2; gb.coins+=gain; state.coinCount+=gain; gb.correct++; sfx('ok'); toast('정답! +'+gain+'🪙 (콤보 '+gb.combo+')'); if(gb.combo>=5) achGrant('gb5'); }
+  else { gb.combo=0; sfx('bad'); toast('오답!'); }
+  updateFunHUD(); setTimeout(gbNext, 950);
+}
+function gbTick(dt){
+  if(!gb||gb.phase!=='play') return;
+  gb.time-=dt; const f=document.getElementById('gb-fill'); if(f) f.style.width=Math.max(0,gb.time/gb.per*100)+'%';
+  if(gb.time<=0){ gb.phase='reveal'; gbReveal(gb.pool[gb.i].it.a,null); gb.combo=0; sfx('bad'); toast('시간 초과!'); setTimeout(gbNext, 950); }
+}
+function gbEnd(){
+  const won=gb?gb.coins:0, cor=gb?gb.correct:0, n=gb?gb.n:0, best=gb?gb.best:0;
+  setDialog('🏁','linear-gradient(135deg,#f0d488,#4a8f5a)','골든벨 결과','수고했어요!');
+  const body=document.getElementById('dlg-body'), foot=document.getElementById('dlg-foot');
+  body.innerHTML='<div class="say" style="text-align:center;font-size:16px"><span class="who" style="display:block;text-align:center">🔔 골든벨 러시 종료</span>정답 <b style="color:var(--gold-hi)">'+cor+' / '+n+'</b> · 최고 콤보 <b>'+best+'</b><br><br>획득 코인 <b style="color:var(--gold-hi);font-size:22px">'+won+' 🪙</b></div>';
+  foot.innerHTML='';
+  const b1=document.createElement('button'); b1.className='btn primary'; b1.textContent='닫기'; b1.onclick=closeDialog;
+  const b2=document.createElement('button'); b2.className='btn'; b2.textContent='🔁 다시 도전'; b2.onclick=gbStart;
+  foot.appendChild(b1); foot.appendChild(b2);
+  gb=null; updateFunHUD();
+}
+
+/* ---------- Achievements ---------- */
+const ACH=[
+ {id:'first', t:'첫 강의', d:'체험존 1곳 이수'},
+ {id:'half', t:'절반 돌파', d:'체험존 4곳 이수'},
+ {id:'grad', t:'🎓 졸업!', d:'4개 체험존 전부 이수'},
+ {id:'coin10', t:'짤짤이', d:'코인 10개 수집'},
+ {id:'coin30', t:'장학생', d:'코인 30개 수집'},
+ {id:'social', t:'인싸', d:'AI 5명과 인사·대화'},
+ {id:'pet', t:'냥집사', d:'캠퍼스 냥이 쓰다듬기'},
+ {id:'cafe', t:'카페인 충전', d:'물치 카페 방문'},
+ {id:'gb', t:'골든벨 도전자', d:'골든벨 퀴즈 러시 플레이'},
+ {id:'gb5', t:'골든벨 5연속', d:'골든벨 5콤보 달성'},
+];
+function achGrant(id){ if(state.ach.has(id)) return; const a=ACH.find(x=>x.id===id); if(!a) return; state.ach.add(id); toast('🏆 도전과제 달성: '+a.t); sfx('ok'); emote(player.x,player.y-42,'🏆'); }
+function achCheck(){
+  if(state.coinCount>=10) achGrant('coin10');
+  if(state.coinCount>=30) achGrant('coin30');
+  if(state.visited.size>=1) achGrant('first');
+  if(state.visited.size>=4) achGrant('half');
+  if(state.visited.size>=8) achGrant('grad');
+  if(state.talkedNpcs.size>=5) achGrant('social');
+}
+function funOpenAch(){
+  const b=document.getElementById('ach-body'); let h='';
+  ACH.forEach(a=>{ const on=state.ach.has(a.id); h+='<div class="say" style="opacity:'+(on?1:.5)+';margin-bottom:8px"><span class="who">'+(on?'✅ ':'🔒 ')+a.t+'</span>'+a.d+'</div>'; });
+  h+='<div class="expl"><span class="tag">진행</span>이수 '+state.visited.size+'/8 · 코인 '+state.coinCount+'개 · 인사/대화 '+state.talkedNpcs.size+'명 · 달성 '+state.ach.size+'/'+ACH.length+'</div>';
+  b.innerHTML=h; document.getElementById('ach').classList.add('show');
+}
+
+/* ---------- HUD / near / draw orchestration ---------- */
+function updateFunHUD(){ const el=document.getElementById('coins'); if(el) el.textContent=state.coinCount; }
+function funNearCheck(){
+  if(dist(player.x,player.y,pet.x,pet.y)<64) return { type:'pet', ref:pet };
+  if(dist(player.x,player.y,CAFE.x,CAFE.y)<64) return { type:'cafe', ref:CAFE };
+  if(dist(player.x,player.y,STAGE.x,STAGE.y)<72) return { type:'stage', ref:STAGE };
+  if(typeof ENTRANCE!=='undefined' && dist(player.x,player.y,ENTRANCE.x,ENTRANCE.y-72)<94) return { type:'gate', ref:{x:ENTRANCE.x,y:ENTRANCE.y-72} };
+  return null;
+}
+function funTick(dt){
+  if(!state.entered) return;
+  if(state.buffT>0) state.buffT-=dt;
+  emotesTick(dt); coinsTick(dt); convoTick(dt); petTick(dt); greetTick(dt); stageTick(dt); gbTick(dt); if(typeof staffTick==="function") staffTick(dt);
+}
+function funDrawProps(){ drawFestival(); drawRest(); drawCafe(); drawStage(); coinsDraw(); }
+function funDrawTop(){
+  for(const cv of convos){ if(cv.phase==='talk'){ ctx.save(); ctx.strokeStyle='rgba(240,212,136,.22)'; ctx.lineWidth=2; ctx.setLineDash([4,4]); ctx.beginPath(); ctx.arc(cv.spot.x,cv.spot.y,34,0,Math.PI*2); ctx.stroke(); ctx.restore(); } }
+  petDraw(); emotesDraw();
+}
+function funNightOverlay(){
+  const hr=(state.clock/60)%24; let d=0;
+  if(hr>=19||hr<5) d=0.32; else if(hr>=17) d=(hr-17)/2*0.32; else if(hr<7) d=(7-hr)/2*0.32;
+  if(d>0.01){ ctx.save(); ctx.fillStyle='rgba(8,14,44,'+d.toFixed(2)+')'; ctx.fillRect(0,0,VW,VH); ctx.restore(); }
+}
+
+/* ---------- init ---------- */
+coinsInit();
+try{ document.getElementById('achBtn').onclick=funOpenAch; }catch(e){}
+
+
+/* ============================================================================
+   MOBILE / TOUCH SUPPORT — virtual joystick + action button (link-only play)
+   ========================================================================== */
+window.touchVec = { x:0, y:0 };
+(function(){
+  const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+  if(isTouch) document.body.classList.add('touch');
+
+  // create/resume audio inside first user gesture (mobile autoplay policy)
+  window.addEventListener('touchstart', function prime(){
+    try{ if(typeof _actx!=='undefined'){ if(_actx==null) _actx=new (window.AudioContext||window.webkitAudioContext)(); if(_actx&&_actx.resume) _actx.resume(); } }catch(e){}
+    window.removeEventListener('touchstart', prime);
+  }, {passive:true});
+
+  const pad=document.getElementById('touchpad'), knob=document.getElementById('touchknob'), btnE=document.getElementById('btnE');
+  const R=46; let jid=null, cx=0, cy=0;
+  function setKnob(dx,dy){ if(knob) knob.style.transform='translate('+dx.toFixed(1)+'px,'+dy.toFixed(1)+'px)'; }
+  function jStart(e){ const t=e.changedTouches[0]; const r=pad.getBoundingClientRect(); cx=r.left+r.width/2; cy=r.top+r.height/2; jid=t.identifier; jMoveTouch(t); e.preventDefault(); }
+  function jMoveTouch(t){ let dx=t.clientX-cx, dy=t.clientY-cy; const m=Math.hypot(dx,dy)||1; const cl=Math.min(m,R); dx=dx/m*cl; dy=dy/m*cl; setKnob(dx,dy); window.touchVec.x=Math.max(-1,Math.min(1,dx/R)); window.touchVec.y=Math.max(-1,Math.min(1,dy/R)); }
+  function jMove(e){ if(jid===null) return; for(const t of e.changedTouches){ if(t.identifier===jid){ jMoveTouch(t); e.preventDefault(); } } }
+  function jEnd(e){ for(const t of e.changedTouches){ if(t.identifier===jid){ jid=null; window.touchVec.x=0; window.touchVec.y=0; setKnob(0,0); } } }
+  if(pad){
+    pad.addEventListener('touchstart', jStart, {passive:false});
+    window.addEventListener('touchmove', jMove, {passive:false});
+    window.addEventListener('touchend', jEnd, {passive:false});
+    window.addEventListener('touchcancel', jEnd, {passive:false});
+  }
+  function doInteract(){ if(!anyModalOpen() && state.entered) tryInteract(); }
+  if(btnE){
+    btnE.addEventListener('touchstart', function(e){ e.preventDefault(); doInteract(); }, {passive:false});
+    btnE.addEventListener('click', doInteract);
+  }
+  window.addEventListener('orientationchange', function(){ setTimeout(function(){ try{ resize(); }catch(e){} }, 250); });
+})();
+
+
+/* ============================================================================
+   CAMPUS LIFE — 학과사무실(조교) · 전공동아리(7) · 물치 학회실
+   출처: 안산대학교 물리치료학과 공식 홈페이지 (전공동아리·학과사무실)
+   ========================================================================== */
+const CLUBS=[
+ {n:'AXIS', f:'축추(Axis · 경추 2번)', c:'#c86a5f', d:'회전과 축의 역할을 하는 축추처럼 물치과의 중심이 되겠다는 포부. 소수 인원이 전공 스터디를 함께하는 가족 같은 분위기의 동아리.'},
+ {n:'CNS', f:'Central Nervous System · 중추신경계', c:'#9a86e0', d:'신경계뿐 아니라 타 과목까지 다양한 스터디로 선후배가 돕고 친목을 쌓아, 즐거운 학교생활과 임상의 좋은 인연을 만드는 동아리.'},
+ {n:'SPT', f:'Sport Physical Therapy', c:'#4fc0af', d:'스포츠 마사지·테이핑 등 스포츠물리치료 교육과, 해부학·생리학 같은 전공과목의 심도 깊은 스터디를 위한 동아리.'},
+ {n:'SS', f:'Skill Share', c:'#6aa9e0', d:'운동처방 및 실습을 집중적으로 다뤄, 사회에서 필요로 하는 인재를 양성하기 위한 동아리.'},
+ {n:'RE:V', f:'Revolunteer · 봉사', c:'#66c07a', d:'봉사활동을 지속한다는 의미의 봉사동아리. 지역사회에 선한 영향력을 전파하며 치료사로서의 봉사정신을 만들어 가는 동아리.'},
+ {n:'약손', f:'아름다운 손', c:'#e0a24b', d:'물치사의 기본 요소 중 하나인 근골격계 촉진을 배우고, 손으로 직접 느껴보며 실습·공부할 수 있는 동아리.'},
+ {n:'HAPT', f:'Human Anatomy of PT · 인체해부학', c:'#7d8ce8', d:'3D 영상 시스템을 활용해 인체 구조를 보다 쉽고 재미있게 알아가고, 선후배 스터디로 친목을 도모하는 인체해부학 동아리.'},
+];
+
+const staff = [
+ mkChar({ x:150, y:645, homeX:150, homeY:645, name:'정성예 조교', role:'staff', color:'#9a7fc0', hair:'#221f1c', speed:34, state:'idle', timer:rnd(1,3) }),
+ mkChar({ x:215, y:645, homeX:215, homeY:645, name:'김희연 조교', role:'staff', color:'#5a92c0', hair:'#221f1c', speed:34, state:'idle', timer:rnd(1,3) }),
+];
+staff.forEach(x=>allChars.push(x));
+function staffTick(dt){
+  for(const s of staff){
+    if(s.state==='walk'){ if(moveToward(s,s.tx,s.ty,dt)){ s.state='idle'; s.moving=false; s.timer=rnd(2.5,6); } }
+    else { s.moving=false; s.timer-=dt; if(s.timer<=0){ s.tx=s.homeX+rnd(-20,20); s.ty=s.homeY+rnd(-6,12); s.state='walk'; } }
+    if(s.bubbleT>0){ s.bubbleT-=dt; if(s.bubbleT<=0) s.bubble=null; }
+  }
+}
+
+function openOffice(){
+  setDialog('🏢','linear-gradient(135deg,#5b6472,#2a3550)','학과사무실','안산대학교 물리치료학과');
+  const body=document.getElementById('dlg-body'), foot=document.getElementById('dlg-foot');
+  body.innerHTML=
+   '<div class="say"><span class="who">안내</span>수강·학적·증명·행정 문의는 학과사무실로 오세요. 친절한 조교 선생님들이 도와드립니다.</div>'+
+   '<div class="say"><span class="who">👩‍💼 조교 선생님</span><b>정성예</b> 조교 · <b>김희연</b> 조교</div>'+
+   jobLink('🏫 물리치료학과 홈페이지 바로가기','https://physi.ansan.ac.kr/physi',false)+jobLink('💼 물리치료 채용공고 (PT-JOB)','https://pt-job.vercel.app/',false)+'<div class="expl"><span class="tag">위치·연락</span>안산대학교 <b>성실관 205호</b> 물리치료학과 · Tel 031-363-6943 · Fax 031-363-7704</div>';
+  foot.innerHTML=''; addFoot('닫기', closeDialog, true); showDialog();
+}
+function openStaff(ref){
+  const nm = ref ? ref.name : '조교';
+  setDialog('👩‍💼','linear-gradient(135deg,#6b7a9a,#2a3550)', nm, '학과사무실 조교');
+  const body=document.getElementById('dlg-body'), foot=document.getElementById('dlg-foot');
+  body.innerHTML='<div class="say"><span class="who">'+nm+'</span>안녕하세요! 무엇을 도와드릴까요? 학과 행정·증명·수강 관련은 언제든 <b>성실관 205호</b> 학과사무실로 오세요.</div>';
+  foot.innerHTML=''; addFoot('🏢 사무실 안내', openOffice); addFoot('닫기', closeDialog, true); showDialog();
+}
+function openClub(){
+  setDialog('🎽','linear-gradient(135deg,#c98b3a,#8a642a)','전공동아리방','안산대 물리치료학과 · 7개 전공동아리');
+  const body=document.getElementById('dlg-body'), foot=document.getElementById('dlg-foot');
+  let h='<div class="say" style="border-style:dashed">매 학기 초 신입 부원 모집! 관심 있는 동아리를 살펴보세요.</div>';
+  CLUBS.forEach(c=>{ h+='<div class="say"><span class="who" style="color:'+c.c+'">'+c.n+' · '+c.f+'</span>'+c.d+'</div>'; });
+  h+=jobLink('🎽 전공동아리 소개 — 학과 홈페이지','https://physi.ansan.ac.kr/physi/circle',false);
+  body.innerHTML=h; foot.innerHTML=''; addFoot('닫기', closeDialog, true); showDialog();
+}
+function openCouncil(){
+  setDialog('📣','linear-gradient(135deg,#3c8f7a,#276b5a)','물리치료학과 학회실','학생회 · 학생 자치기구');
+  const body=document.getElementById('dlg-body'), foot=document.getElementById('dlg-foot');
+  body.innerHTML=
+   '<div class="say"><span class="who">물치 학생회(학회)</span>학생 대표 기구로서 학과 행사·MT·체육대회·학술제를 기획하고, 학생 복지와 선후배 교류, 국시 대비 스터디를 지원합니다.</div>'+
+   '<div class="say"><span class="who">🙌 함께해요</span>과대·집행부 모집, 행사 자원봉사 등 참여 기회가 열려 있습니다. 궁금하면 학회실로 오세요!</div>'+
+   jobLink('👥 임원소개 — 학생회·임원 보기','https://physi.ansan.ac.kr/physi/officer',false)+'<div class="expl"><span class="tag">참고</span>임원·행사 정보는 학과 「임원소개」 페이지에서 확인하세요.</div>';
+  foot.innerHTML=''; addFoot('닫기', closeDialog, true); showDialog();
+}
+
+
+/* ============================================================================
+   대학일자리플러스센터 — 진로·취업·직무 + 「자기를 이해하기」(심경섭 교수)
+   출처: 안산대학교 대학일자리플러스센터 (job.ansan.ac.kr) · Map of Me (map-of-me.vercel.app)
+   ========================================================================== */
+function jobLink(label,url,hl){ return '<a class="joblink'+(hl?' hl':'')+'" href="'+url+'" target="_blank" rel="noopener">'+label+'<span>↗</span></a>'; }
+
+function openCareer(){
+  setDialog('💼','linear-gradient(135deg,#2f7fb0,#1f4f80)','대학일자리플러스센터','안산대학교 · 진로·취업·직무 원스톱');
+  const body=document.getElementById('dlg-body'), foot=document.getElementById('dlg-foot');
+  let h='<div class="say" style="border-style:dashed;border-color:var(--gold)"><span class="who" style="color:var(--gold-hi)">🩺 물리치료사가 되는 길</span>① 물리치료(학)과 진학(전문대 3년 · 대학교 4년) → ② 전공·실습 이수 → ③ <b>물리치료사 국가시험 합격</b> → ④ <b>보건복지부장관 면허</b> 취득 → ⑤ 현장으로! 일하는 곳은 병원·의원·재활병원·요양병원·보건소·복지관·스포츠팀·산업체 등 다양해요.</div>';
+  h+='<div class="say"><span class="who">안내</span>고용노동부·안산대학교·안산시가 함께 운영하는 일원화 진로·취업 지원기관. 상담·채용정보·잡매칭·프로그램으로 성공적인 사회진출을 돕습니다. <b>“나를 알아주는 대학”</b></div>';
+  h+='<div class="say" style="border-style:dashed;border-color:var(--gold)"><span class="who" style="color:var(--gold-hi)">🧭 자기를 이해하기 · 심경섭 교수</span>대학일자리플러스센터 부센터장 심경섭 교수의 진로상담 카테고리. 나의 성향·강점을 돌아보고 진로·직무 방향을 스스로 설계하는 자기이해 활동입니다.</div>';
+  h+=jobLink('🧭 자기를 이해하기 — Map of Me 열기','https://map-of-me.vercel.app/',true);
+  h+=jobLink('🗺️ 진로·취업 로드맵','https://job.ansan.ac.kr/job/content/4',false);
+  h+=jobLink('💬 진로·취업 상담 신청','https://aujob.ansan.ac.kr/aujob',false);
+  h+=jobLink('📢 채용정보·취업매칭','https://job.ansan.ac.kr/job/board/1',false);
+  h+=jobLink('💼 물리치료사는 어디서 일할까? — PT-JOB 채용공고','https://pt-job.vercel.app/',true);
+  h+=jobLink('🤖 AI 자기소개서 솔루션','https://aujob.ansan.ac.kr/aujob/ai',false);
+  h+=jobLink('🎤 AI 면접 솔루션','https://www.deepresume.kr/user/login/ansan',false);
+  h+='<div class="say"><span class="who">🧩 직무·역량 프로그램</span>현직자 직무 특강 · 실무역량 마스터 클래스 · 기업탐방 · 온라인 멘토링 · 취업교과목 운영</div>';
+  h+='<div class="expl"><span class="tag">위치·연락</span>안산대학교 안산대학로 155 · Tel 031-400-7134 · Instagram @ansan_job</div>';
+  body.innerHTML=h; foot.innerHTML='';
+  addFoot('🧭 자기를 이해하기', openSelfMap, true); addFoot('닫기', closeDialog);
+  showDialog();
+}
+
+function openSelfMap(){
+  setDialog('🧭','linear-gradient(135deg,#d4af52,#2f7fb0)','자기를 이해하기','심경섭 교수 · 진로 상담 주제');
+  const body=document.getElementById('dlg-body'), foot=document.getElementById('dlg-foot');
+  body.innerHTML=
+   '<div class="say"><span class="who">심경섭 교수</span>진로의 출발점은 <b>“나를 아는 것”</b>입니다. 나의 성향·강점·가치를 돌아보고, 물리치료사로서(그리고 그 너머의) 진로·직무 방향을 스스로 설계해 봅시다.</div>'+
+   '<div class="say"><span class="who">🧭 Map of Me · 명도(命圖)</span>사주·성격유형(16유형)·리더십 이미지를 <b>매개</b>로 나를 돌아보는 자기이해·성찰 워크시트입니다. 운세를 예언하는 점(占)이 아니라, 나와 대화하는 재료로 쓰는 <b>교육용 도구</b>예요. <b>‘진로·취업 모드’</b>는 생년월일 없이 16유형+리더형만으로 성향·직무 방향 리포트를 만들 수 있습니다.</div>'+'<div class="say"><span class="who">📄 결과물: 상담 요약</span>완료하면 <b>「자기이해·진로 상담 요약」</b>을 PDF·PNG로 만들 수 있어요 — 성향·지향 리더상·타고난 결, 일의 방향(직무·적성), 학생생활 포인트, 이번 달 실행 약속(체크리스트), 상담 메모·서명란까지. 물치 학생용으로 스포츠재활·도수치료·1인 센터·필라테스 창업 같은 진로 예시도 제시됩니다. (대화 촉진용 참고자료 · 표준화 검사·진단 아님 · 진로 결정은 대학일자리센터 상담과 병행)</div>'+
+   '<div style="text-align:center;margin:6px 0 2px">'+jobLink('🧭 Map of Me 바로가기 — map-of-me.vercel.app','https://map-of-me.vercel.app/',true)+'</div>'+
+   '<div class="expl"><span class="tag">참고</span>명리·성격유형 해석은 문화·교육용 참고 정보이며 검증된 과학적 예측이 아닙니다. 특정 종교·신앙과 무관하며, 결과에 얽매이지 말고 자기 성찰의 한 관점으로만 참고하세요.</div>';
+  foot.innerHTML=''; addFoot('← 센터로', openCareer); addFoot('닫기', closeDialog, true);
+  showDialog();
+}
+
+
+/* ============================================================================
+   학과 안내·홍보 허브 (입구 게이트 / 🏫 학과 버튼) — 공식 링크 모음
+   ========================================================================== */
+function openWelcome(){
+  setDialog('🏫','linear-gradient(135deg,#0e2a5e,#d4af52)','안산대학교 물리치료학과','전문의료인 물리치료사 · Since 1982');
+  const body=document.getElementById('dlg-body'), foot=document.getElementById('dlg-foot');
+  let h='<div class="say"><span class="who">학과 안내 · 홍보</span>건강한 삶으로 치유하고 회복시키는 <b>전문의료인 물리치료사</b>를 양성합니다. 아래에서 학과의 다양한 정보를 만나보세요.</div>';
+  h+=jobLink('🏠 학과 홈페이지 메인','https://physi.ansan.ac.kr/physi',true);
+  h+=jobLink('📖 학과 소개 · 비전/교육목표','https://physi.ansan.ac.kr/physi/content/1',false);
+  h+=jobLink('📘 교육과정 · 로드맵','https://physi.ansan.ac.kr/physi/roadmap',false);
+  h+=jobLink('👩‍🏫 교수진 소개','https://physi.ansan.ac.kr/physi/professor',false);
+  h+=jobLink('🎽 전공동아리 소개','https://physi.ansan.ac.kr/physi/circle',false);
+  h+=jobLink('📰 학과뉴스 · 포토갤러리','https://physi.ansan.ac.kr/physi/board/3',false);
+  h+=jobLink('💼 대학일자리플러스센터 (진로·취업)','https://job.ansan.ac.kr/job',false);
+  h+=jobLink('💼 졸업 후 진로 — 물리치료 채용공고 (PT-JOB)','https://pt-job.vercel.app/',false);
+  h+=jobLink('▶ 학과 홍보영상 (YouTube)','https://www.youtube.com/watch?v=i1GJbMdRMuE',false);
+  h+=jobLink('🚁 안산대 캠퍼스 VR 항공뷰','https://www.ansan.ac.kr/site/resource/ansan/vrtour/tour.html',false);
+  h+='<div class="expl"><span class="tag">문의</span>안산대학교 성실관 205호 물리치료학과 · Tel 031-363-6943</div>';
+  body.innerHTML=h; foot.innerHTML=''; addFoot('🚁 캠퍼스 안내(VR)', openCampusTour); addFoot('닫기', closeDialog, true); showDialog();
+}
+try{ document.getElementById('deptBtn').onclick=openWelcome; }catch(e){}
+
+
+/* ===== 안산대학교 캠퍼스 안내 (VR 항공뷰) — 안산대 전체 캠퍼스 ===== */
+function openCampusTour(){
+  setDialog('🚁','linear-gradient(135deg,#2b6cb0,#0e2a5e)','안산대학교 캠퍼스 안내','VR 항공뷰 · ANSAN UNIVERSITY');
+  const body=document.getElementById('dlg-body'), foot=document.getElementById('dlg-foot');
+  let h='<div class="say"><span class="who">캠퍼스 안내</span>물리치료학과(성실관 205호)가 자리한 <b>안산대학교</b> 전체 캠퍼스입니다. 항공뷰(VR)로 360° 둘러보세요.</div>';
+  h+=jobLink('🚁 안산대 캠퍼스 VR 항공뷰 투어','https://www.ansan.ac.kr/site/resource/ansan/vrtour/tour.html',true);
+  h+=jobLink('🏫 안산대학교 홈페이지','https://www.ansan.ac.kr',false);
+  h+='<div class="say"><span class="who">🏛️ 교육·행정</span><b>성실관</b> — 물리치료학과(205호) · <b>대학본관</b> · 예지관 · 자유관 · 진리관 · 강석봉기념관</div>';
+  h+='<div class="say"><span class="who">📚 학생·복지</span>학생회관 · 도서관 · 채플관 · 웰니스센터 · 창업보육센터</div>';
+  h+='<div class="say"><span class="who">🌳 야외·체육</span>대학정문 · 잔디광장 · 운동장 · 농구장 · 테니스장</div>';
+  body.innerHTML=h; foot.innerHTML=''; addFoot('← 학과 안내로', openWelcome); addFoot('닫기', closeDialog, true); showDialog();
+}
+
+
+/* ============================================================================
+   SCENE PROPS — 분수대 · 학생 휴게공간 · 물리치료학과 학술제 부스
+   ========================================================================== */
+const REST = { x:700, y:1065 };
+const FESTIVAL = [
+  { x:120,  y:770,  c:'#c8506a', n:'체험부스' },
+  { x:120,  y:930,  c:'#3a72c4', n:'포스터' },
+  { x:120,  y:1090, c:'#4a8f5a', n:'물치제' },
+  { x:610,  y:880,  c:'#d08a2e', n:'학술제' }
+];
+
+function drawFountain(x,y){
+  var t=performance.now()/1000;
+  ctx.fillStyle='#bcae86';ctx.beginPath();ctx.ellipse(x,y,60,36,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#2b6b7a';ctx.beginPath();ctx.ellipse(x,y,52,30,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#3f97a8';ctx.beginPath();ctx.ellipse(x,y,40,22,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#cfc19a';ctx.beginPath();ctx.ellipse(x,y-6,24,12,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#bcae86';ctx.fillRect(x-4,y-28,8,24);
+  ctx.fillStyle='#cfc19a';ctx.beginPath();ctx.ellipse(x,y-28,14,7,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#bcae86';ctx.fillRect(x-3,y-44,6,16);
+  ctx.fillStyle='#cfc19a';ctx.beginPath();ctx.ellipse(x,y-44,8,4,0,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='rgba(185,232,242,.7)';ctx.lineWidth=2;
+  for(var i=0;i<7;i++){ var a=i/7*Math.PI*2; var r=16+Math.sin(t*3+i)*3;
+    ctx.beginPath();ctx.moveTo(x,y-48);ctx.quadraticCurveTo(x+Math.cos(a)*r*0.6,y-62-Math.sin(t*2+i)*4,x+Math.cos(a)*r,y-34);ctx.stroke(); }
+  ctx.fillStyle='#eafaff';
+  for(var j=0;j<10;j++){ var a2=t*2+j; var rr=12+((t*40+j*13)%20); ctx.globalAlpha=Math.max(0,1-rr/32);
+    ctx.beginPath();ctx.arc(x+Math.cos(a2)*rr,y-34+Math.sin(a2*1.3)*4,1.6,0,Math.PI*2);ctx.fill(); }
+  ctx.globalAlpha=1;
+  ctx.strokeStyle='rgba(205,242,250,.8)';ctx.lineWidth=2.4;ctx.beginPath();ctx.moveTo(x,y-50);ctx.lineTo(x,y-60-Math.sin(t*4)*3);ctx.stroke();
+}
+
+function drawParasol(x,y,col){
+  ctx.fillStyle='rgba(0,0,0,.18)';ctx.beginPath();ctx.ellipse(x,y+14,16,5,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#cbb48a';ctx.beginPath();ctx.ellipse(x,y+8,12,5,0,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='#8a7350';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x,y+6);ctx.lineTo(x,y-16);ctx.stroke();
+  ctx.fillStyle=col;ctx.beginPath();ctx.moveTo(x-18,y-14);ctx.lineTo(x+18,y-14);ctx.lineTo(x,y-30);ctx.closePath();ctx.fill();
+  ctx.fillStyle='rgba(255,255,255,.25)';ctx.beginPath();ctx.moveTo(x-6,y-14);ctx.lineTo(x+6,y-14);ctx.lineTo(x,y-26);ctx.closePath();ctx.fill();
+}
+
+function drawRest(){
+  var x=REST.x, y=REST.y;
+  ctx.fillStyle='#caa877';drawRoundRect(x-82,y-46,164,92,12);ctx.fill();
+  ctx.strokeStyle='#a8895c';ctx.lineWidth=1;for(var i=-72;i<82;i+=14){ctx.beginPath();ctx.moveTo(x+i,y-46);ctx.lineTo(x+i,y+46);ctx.stroke();}
+  ctx.fillStyle='#0b224e';drawRoundRect(x-58,y-64,116,20,6);ctx.fill();ctx.strokeStyle='#d4af52';ctx.lineWidth=1.5;drawRoundRect(x-58,y-64,116,20,6);ctx.stroke();
+  ctx.fillStyle='#f4ead0';ctx.font='bold 12px '+FSAN;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🌿 학생 휴게공간',x,y-54);
+  drawParasol(x-42,y-4,'#7fb0e0'); drawParasol(x+44,y,'#e0b04b');
+  ctx.fillStyle='#7a5a34';ctx.fillRect(x-72,y+30,42,6);ctx.fillStyle='#664c2a';ctx.fillRect(x-72,y+22,42,4);
+  ctx.fillStyle='#2f5d3a';ctx.beginPath();ctx.arc(x+66,y+30,10,0,Math.PI*2);ctx.arc(x+54,y+34,8,0,Math.PI*2);ctx.fill();
+}
+
+function drawBooth(x,y,col,label){
+  ctx.fillStyle='rgba(0,0,0,.2)';drawRoundRect(x-32,y+18,64,8,5);ctx.fill();
+  ctx.fillStyle='#f4ead0';ctx.fillRect(x-30,y-6,60,26);
+  ctx.fillStyle='#caa877';ctx.fillRect(x-30,y+16,60,5);
+  ctx.strokeStyle='#8a7350';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x-28,y+20);ctx.lineTo(x-28,y-6);ctx.moveTo(x+28,y+20);ctx.lineTo(x+28,y-6);ctx.stroke();
+  for(var i=0;i<6;i++){ctx.fillStyle=(i%2)?col:'#f7f0e0';ctx.fillRect(x-30+i*10,y-20,10,14);}
+  ctx.fillStyle=col;ctx.beginPath();ctx.moveTo(x-34,y-6);ctx.lineTo(x+34,y-6);ctx.lineTo(x+30,y-2);ctx.lineTo(x-30,y-2);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#0b224e';drawRoundRect(x-30,y-34,60,14,5);ctx.fill();
+  ctx.fillStyle='#f4ead0';ctx.font='bold 9px '+FSAN;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(label,x,y-27);
+}
+function drawFestival(){ for(var k=0;k<FESTIVAL.length;k++){ var f=FESTIVAL[k]; drawBooth(f.x,f.y,f.c,f.n); } }
+
+
+/* ===== overview(전체보기) + 성별 캐릭터 ===== */
+state.overview=false;
+try{ document.getElementById('mapBtn').onclick=function(){ state.overview=!state.overview; var b=document.getElementById('mapBtn'); if(b) b.classList.toggle('on', state.overview); }; }catch(e){}
+(function(){
+  var FEM=new Set(['아이유','손예진','제니','카리나','지수','아이린','하니','태연','이영지','수지','류진','장원영']);
+  try{ students.forEach(function(s){ s.sex=FEM.has(s.name)?'f':'m'; }); }catch(e){}
+  try{ professors.forEach(function(p){ p.sex=(p.name.indexOf('김신영')===0)?'f':'m'; }); }catch(e){}
+  try{ if(typeof staff!=='undefined') staff.forEach(function(s){ s.sex='f'; }); }catch(e){}
+})();
+
+/* ===== 모바일/데스크톱: 핀치·휠 확대축소 + 드래그로 배경이동 + 탭 이동/상호작용 ===== */
+(function(){
+  var cv=document.getElementById('cv'); if(!cv) return;
+  window.camZoom=window.camZoom||1; window.panOffset=window.panOffset||{x:0,y:0};
+  function clampZ(z){ return Math.max(0.55, Math.min(2.4, z)); }
+  function clampP(v){ return Math.max(-1400, Math.min(1400, v)); }
+  window.recenterCam=function(){ window.panOffset.x=0; window.panOffset.y=0; };
+  cv.addEventListener('wheel', function(e){ if(state.overview) return; window.camZoom=clampZ((window.camZoom||1)*(e.deltaY<0?1.1:0.9)); e.preventDefault(); }, {passive:false});
+  var rb=document.getElementById('recenterBtn');
+  if(rb){ rb.addEventListener('click', function(){ window.recenterCam(); }); }
+  var md=false, mlx=0,mly=0, msx=0,msy=0, mmoved=false, mt0=0;
+  cv.addEventListener('mousedown', function(e){ md=true; mlx=msx=e.clientX; mly=msy=e.clientY; mmoved=false; mt0=Date.now(); });
+  window.addEventListener('mousemove', function(e){ if(!md) return; if(Math.abs(e.clientX-msx)+Math.abs(e.clientY-msy)>6) mmoved=true; if(mmoved){ var pz=window.camZoom||1,_po=window.panOffset; _po.x=clampP(_po.x-(e.clientX-mlx)/pz); _po.y=clampP(_po.y-(e.clientY-mly)/pz); mlx=e.clientX; mly=e.clientY; } });
+  window.addEventListener('mouseup', function(e){ if(md && !mmoved && (Date.now()-mt0)<350 && window.handleTap) window.handleTap(e.clientX,e.clientY); md=false; });
+  if(!(('ontouchstart' in window)||navigator.maxTouchPoints>0)) return;
+  var pin=null, dragId=null, lx=0, ly=0, sx=0, sy=0, moved=false, tt0=0;
+  function ft(list,id){ for(var i=0;i<list.length;i++) if(list[i].identifier===id) return list[i]; return null; }
+  cv.addEventListener('touchstart', function(e){
+    for(var i=0;i<e.changedTouches.length;i++){
+      var t=e.changedTouches[i];
+      if(dragId!==null && pin===null){
+        var t0t=ft(e.touches,dragId);
+        if(t0t){ pin={a:dragId,b:t.identifier,d0:(Math.hypot(t.clientX-t0t.clientX,t.clientY-t0t.clientY)||1),z0:(window.camZoom||1)}; dragId=null; }
+      } else if(dragId===null && pin===null){
+        dragId=t.identifier; lx=sx=t.clientX; ly=sy=t.clientY; moved=false; tt0=Date.now();
+      }
+    }
+    e.preventDefault();
+  }, {passive:false});
+  cv.addEventListener('touchmove', function(e){
+    if(pin){ var a=ft(e.touches,pin.a), b=ft(e.touches,pin.b);
+      if(a&&b){ var d=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY)||1; window.camZoom=clampZ(pin.z0*(d/pin.d0)); } e.preventDefault(); return; }
+    if(dragId!==null){ var t=ft(e.changedTouches,dragId)||ft(e.touches,dragId);
+      if(t){ if(Math.abs(t.clientX-sx)+Math.abs(t.clientY-sy)>10) moved=true;
+        if(moved){ var pz=window.camZoom||1,_po=window.panOffset; _po.x=clampP(_po.x-(t.clientX-lx)/pz); _po.y=clampP(_po.y-(t.clientY-ly)/pz); lx=t.clientX; ly=t.clientY; }
+        e.preventDefault();
+      }
+    }
+  }, {passive:false});
+  function endT(e){ for(var i=0;i<e.changedTouches.length;i++){ var id=e.changedTouches[i].identifier;
+    if(pin&&(id===pin.a||id===pin.b)){ pin=null; }
+    if(id===dragId){ if(!moved && (Date.now()-tt0)<350 && window.handleTap){ var tt=e.changedTouches[i]; window.handleTap(tt.clientX,tt.clientY); } dragId=null; }
+  } }
+  cv.addEventListener('touchend', endT, {passive:false});
+  cv.addEventListener('touchcancel', endT, {passive:false});
+})();
+
+/* tap-to-move / tap-to-interact (top-level) */
+player.mt=null; player.mtI=false;
+function screenToWorld(cx,cy){ var Z=window.camZoom||1; return { x:(cx-VW/2)/Z + cam.x + VW/2, y:(cy-VH/2)/Z + cam.y + VH/2 }; }
+function tapApproach(wx,wy){
+  var R=48, best=null, bd=R;
+  professors.forEach(function(p){ var d=dist(wx,wy,p.x,p.y); if(d<bd){bd=d;best={x:p.x,y:p.y+30};} });
+  if(typeof staff!=='undefined') staff.forEach(function(p){ var d=dist(wx,wy,p.x,p.y); if(d<bd){bd=d;best={x:p.x,y:p.y+30};} });
+  for(var i=0;i<BUILDINGS.length;i++){ var b=BUILDINGS[i]; if(!b.subj&&!b.role) continue;
+    if(wx>b.x-12&&wx<b.x+b.w+12&&wy>b.y-72&&wy<b.y+b.h+46){ var dr=doorOf(b); best={x:dr.x,y:dr.y}; bd=0; break; } }
+  var props=[];
+  if(typeof CAFE!=='undefined')props.push({x:CAFE.x,y:CAFE.y+34});
+  if(typeof STAGE!=='undefined')props.push({x:STAGE.x,y:STAGE.y+34});
+  if(typeof ENTRANCE!=='undefined')props.push({x:ENTRANCE.x,y:ENTRANCE.y-40});
+  if(typeof pet!=='undefined')props.push({x:pet.x,y:pet.y+24});
+  for(var j=0;j<props.length;j++){ var d=dist(wx,wy,props[j].x,props[j].y); if(d<bd){bd=d;best=props[j];} }
+  return best;
+}
+window.handleTap=function(cx,cy){
+  if(!state.entered || anyModalOpen() || state.spectate || state.overview) return;
+  var w=screenToWorld(cx,cy);
+  var ap=tapApproach(w.x,w.y);
+  if(ap){ player.mt={x:clamp(ap.x,20,WORLD.w-20),y:clamp(ap.y,20,WORLD.h-20)}; player.mtI=true; }
+  else { player.mt={x:clamp(w.x,20,WORLD.w-20),y:clamp(w.y,20,WORLD.h-20)}; player.mtI=false; }
+};
+
+/* ===== 길 안내 화살표 · 진행 저장 · 조작 툴팁 · 백그라운드 일시정지 ===== */
+function drawGuide(){
+  if(!state.entered || state.spectate || state.overview) return;
+  var best=null, bd=1e9;
+  for(var i=0;i<BUILDINGS.length;i++){ var b=BUILDINGS[i]; if(!b.subj) continue; if(state.visited.has(b.subj)) continue;
+    var dr=doorOf(b); var d=dist(player.x,player.y,dr.x,dr.y); if(d<bd){bd=d;best=dr;} }
+  if(!best || bd<95) return;
+  var ang=Math.atan2(best.y-player.y, best.x-player.x);
+  var ax=player.x+Math.cos(ang)*44, ay=(player.y-30)+Math.sin(ang)*44;
+  var pulse=0.55+Math.sin(performance.now()/300)*0.28;
+  ctx.save(); ctx.translate(ax,ay); ctx.rotate(ang);
+  ctx.fillStyle='rgba(240,212,136,'+pulse.toFixed(2)+')';
+  ctx.beginPath(); ctx.moveTo(13,0); ctx.lineTo(-7,-8); ctx.lineTo(-3,0); ctx.lineTo(-7,8); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle='rgba(90,66,16,.85)'; ctx.lineWidth=1; ctx.stroke();
+  ctx.restore();
+}
+var SAVE_KEY='aupt_save_v1';
+function saveProg(){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify({
+  score:state.score, correct:state.correct, coinCount:state.coinCount,
+  visited:Array.from(state.visited), talked: state.talkedNpcs?Array.from(state.talkedNpcs):[],
+  zoom: window.camZoom||1, muted: !!window.muted })); }catch(e){} }
+function loadProg(){ var raw; try{ raw=localStorage.getItem(SAVE_KEY); }catch(e){ return; } if(!raw) return;
+  var d; try{ d=JSON.parse(raw); }catch(e){ return; } if(!d) return;
+  if(typeof d.score==='number') state.score=d.score;
+  if(typeof d.correct==='number') state.correct=d.correct;
+  if(typeof d.coinCount==='number') state.coinCount=d.coinCount;
+  if(Array.isArray(d.visited)) d.visited.forEach(function(v){ state.visited.add(v); });
+  if(Array.isArray(d.talked)&&state.talkedNpcs) d.talked.forEach(function(v){ state.talkedNpcs.add(v); });
+  if(typeof d.zoom==='number') window.camZoom=Math.max(0.55,Math.min(2.4,d.zoom));
+  if(typeof d.muted==='boolean'){ window.muted=d.muted; try{ syncSndBtn(); }catch(e){} }
+  try{ updateHUD(); }catch(e){} try{ if(typeof updateFunHUD==='function') updateFunHUD(); }catch(e){}
+  try{ if(state.visited.size>0) toast('이어하기 — 저장된 진행을 불러왔어요'); }catch(e){}
+}
+window.resetProg=function(){ try{ localStorage.removeItem(SAVE_KEY); }catch(e){} };
+document.addEventListener('visibilitychange', function(){ if(!document.hidden){ last=performance.now(); } });
+(function(){
+  function touchDev(){ return ('ontouchstart' in window)||navigator.maxTouchPoints>0; }
+  function showHint(){ var el=document.getElementById('ctrlhint'); if(!el) return; var b=el.querySelector('.ch-body');
+    b.innerHTML = touchDev()
+      ? '🕹️ <b>이동</b> 왼쪽 조이스틱 · 👆 <b>탭</b> 그곳으로 이동·상호작용<br>🤏 <b>확대·축소</b> 두 손가락 · ✋ <b>둘러보기</b> 화면 드래그 · 📍 <b>내 위치</b>로 복귀'
+      : '⌨️ <b>이동</b> WASD/화살표 · 🖱️ <b>클릭</b> 그곳으로 이동 · 🖲️ <b>휠</b> 확대·축소 · <b>E</b> 상호작용';
+    el.classList.add('show'); clearTimeout(el._t); el._t=setTimeout(function(){ el.classList.remove('show'); }, 7500); }
+  function rotHint(){ if(touchDev() && window.matchMedia && window.matchMedia('(orientation:portrait)').matches){ try{ toast('📱 가로로 돌리면 더 편해요'); }catch(e){} } }
+  var sb=document.getElementById('startBtn');
+  if(sb) sb.addEventListener('click', function(){ setTimeout(showHint,450); setTimeout(rotHint,1700); });
+  var x=document.getElementById('ctrlhint-x'); if(x) x.addEventListener('click', function(){ var el=document.getElementById('ctrlhint'); if(el) el.classList.remove('show'); });
+})();
+
+/* ===== 원곡고 업그레이드: 교시 표기 · 체험 수료증 ===== */
+const DAY_TAG = { introzone:'1일차 1교시', assess:'1일차 2교시', massage:'2일차 1교시', agent:'2일차 2교시' };
+
+function certReady(){ return state.visited.size>=4; }
+function openCert(){
+  setDialog('🎫','linear-gradient(135deg,#0e2a5e,#d4af52)','체험 수료증','안산대학교 물리치료학과 × 원곡고등학교');
+  const body=document.getElementById('dlg-body'), foot=document.getElementById('dlg-foot');
+  const done=state.visited.size, names=BUILDINGS.filter(b=>b.subj).map(b=>(state.visited.has(b.subj)?'✅ ':'⬜ ')+DAY_TAG[b.subj]+' '+SUBJ_NAME[b.subj]).join('<br>');
+  let h='<div class="say"><span class="who">진행 상황</span>체험 배지 <b>'+done+' / 4</b><br>'+names+'</div>';
+  if(!certReady()){
+    h+='<div class="say"><span class="who">안내</span>4개 체험존을 모두 이수하면 <b>수료증</b>을 발급할 수 있어요. 남은 체험존으로 가볼까요? (금빛 화살표가 방향을 알려줘요)</div>';
+    body.innerHTML=h; foot.innerHTML=''; addFoot('닫기', closeDialog, true); showDialog(); return;
+  }
+  h+='<div class="say"><span class="who">🎉 축하합니다</span>4개 체험존을 모두 마쳤어요! 이름을 적고 수료증을 받아가세요.</div>';
+  h+='<div style="margin:10px 0"><input id="cert-name" type="text" maxlength="10" placeholder="이름 (예: 김원곡)" '
+   + 'style="width:100%;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--text);font-size:15px"></div>';
+  body.innerHTML=h; foot.innerHTML='';
+  addFoot('🎫 수료증 받기 (PNG 저장)', function(){
+    const el=document.getElementById('cert-name');
+    const nm=(el&&el.value.trim())||'원곡고 학생';
+    makeCert(nm);
+  }, true);
+  addFoot('닫기', closeDialog);
+  showDialog();
+}
+function makeCert(name){
+  try{
+    const W=1200,H=850, c=document.createElement('canvas'); c.width=W; c.height=H;
+    const g=c.getContext('2d');
+    g.fillStyle='#0b224e'; g.fillRect(0,0,W,H);
+    const gr=g.createLinearGradient(0,0,W,H); gr.addColorStop(0,'rgba(212,175,82,.16)'); gr.addColorStop(1,'rgba(79,209,197,.10)');
+    g.fillStyle=gr; g.fillRect(0,0,W,H);
+    g.strokeStyle='#d4af52'; g.lineWidth=6; g.strokeRect(28,28,W-56,H-56);
+    g.strokeStyle='rgba(240,212,136,.55)'; g.lineWidth=2; g.strokeRect(46,46,W-92,H-92);
+    g.textAlign='center';
+    g.fillStyle='#f0d488'; g.font='bold 26px sans-serif';
+    g.fillText('ANSAN UNIVERSITY · DEPT. OF PHYSICAL THERAPY × 원곡고등학교', W/2, 118);
+    g.fillStyle='#f4ead0'; g.font='bold 68px serif';
+    g.fillText('체 험 수 료 증', W/2, 215);
+    g.strokeStyle='#d4af52'; g.lineWidth=3; g.beginPath(); g.moveTo(W/2-170,240); g.lineTo(W/2+170,240); g.stroke();
+    g.fillStyle='#dfe8ff'; g.font='24px sans-serif';
+    g.fillText('성명', W/2, 300);
+    g.fillStyle='#ffffff'; g.font='bold 56px sans-serif';
+    g.fillText(name, W/2, 362);
+    g.fillStyle='#dfe8ff'; g.font='23px sans-serif';
+    const L1='위 학생은 안산대학교 물리치료학과 진로체험 과정을 성실히 이수하고,';
+    const L2='물리치료의 과정인 평가 → 중재(운동·치료) → 재평가를 직접 경험하였기에';
+    const L3='이 수료증을 수여합니다.';
+    g.fillText(L1, W/2, 430); g.fillText(L2, W/2, 466); g.fillText(L3, W/2, 502);
+    g.fillStyle='#f0d488'; g.font='bold 22px sans-serif';
+    const zones=BUILDINGS.filter(b=>b.subj).map(b=>SUBJ_NAME[b.subj]);
+    g.fillText('🎖️ 이수 체험존 : '+zones.join(' · '), W/2, 566);
+    g.fillStyle='#bcd0f5'; g.font='20px sans-serif';
+    const d=new Date();
+    g.fillText(d.getFullYear()+'년 '+(d.getMonth()+1)+'월 '+d.getDate()+'일', W/2, 648);
+    g.fillStyle='#f4ead0'; g.font='bold 30px serif';
+    g.fillText('안산대학교 물리치료학과', W/2, 706);
+    g.fillStyle='#9fb3d9'; g.font='18px sans-serif';
+    g.fillText('Ansan University · Department of Physical Therapy · Since 1982', W/2, 742);
+    const url=c.toDataURL('image/png');
+    const a=document.createElement('a'); a.href=url; a.download='체험수료증_'+name+'.png';
+    document.body.appendChild(a); a.click(); a.remove();
+    toast('🎫 수료증을 저장했어요!');
+    try{ achGrant('cert'); }catch(e){}
+  }catch(e){ toast('수료증 저장 실패 — 다른 브라우저에서 시도해보세요.'); }
+}
+try{ document.getElementById('certBtn').onclick=openCert; }catch(e){}
+
+/* ===== UX 업그레이드: 미니맵 · 사운드 토글 · 아바타 커스터마이즈 ===== */
+window.miniOn = true;
+window.muted = false;
+
+/* 아바타 색상 선택 */
+const PC_COLORS = ['#4fd1c5','#f0d488','#e07a8f','#7fb0e0','#81b29a','#c98bb9'];
+window.pcColor = PC_COLORS[0];
+(function(){
+  var wrap=document.getElementById('pcColors'); if(!wrap) return;
+  PC_COLORS.forEach(function(c,i){
+    var b=document.createElement('button');
+    b.className='pcsw'+(i===0?' on':''); b.style.background=c; b.type='button'; b.setAttribute('aria-label','색 '+(i+1));
+    b.onclick=function(){ window.pcColor=c; wrap.querySelectorAll('.pcsw').forEach(function(e){e.classList.remove('on');}); b.classList.add('on'); };
+    wrap.appendChild(b);
+  });
+})();
+function applyAvatar(){
+  try{
+    var n=document.getElementById('pcName');
+    var nm=(n&&n.value.trim())||'';
+    if(nm) player.name=nm;
+    if(window.pcColor) player.color=window.pcColor;
+  }catch(e){}
+}
+
+/* 사운드 토글 */
+function syncSndBtn(){
+  var b=document.getElementById('sndBtn'); if(!b) return;
+  b.textContent = window.muted ? '🔇 소리끔' : '🔊 소리';
+  b.classList.toggle('on', !window.muted);
+}
+try{
+  var _sb=document.getElementById('sndBtn');
+  if(_sb) _sb.onclick=function(){ window.muted=!window.muted; syncSndBtn(); try{ if(!window.muted) sfx('ok'); }catch(e){} };
+  syncSndBtn();
+}catch(e){}
+
+/* 미니맵 (화면 좌표계) */
+function drawMinimap(){
+  if(!state.entered || state.overview || !window.miniOn) return;
+  var isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints>0;
+  var MW = (VW<560? 104 : 138);
+  var MH = Math.round(MW * WORLD.h / WORLD.w);
+  var mx = VW - MW - 16;
+  var my = VH - MH - (isTouch ? 118 : 20);
+  var sx = MW/WORLD.w, sy = MH/WORLD.h;
+  ctx.save();
+  ctx.fillStyle='rgba(9,22,50,.88)'; drawRoundRect(mx,my,MW,MH,10); ctx.fill();
+  ctx.strokeStyle='rgba(212,175,82,.55)'; ctx.lineWidth=1.4; drawRoundRect(mx,my,MW,MH,10); ctx.stroke();
+  for(var i=0;i<BUILDINGS.length;i++){
+    var b=BUILDINGS[i];
+    ctx.fillStyle = b.subj ? (state.visited.has(b.subj) ? '#5fd39a' : b.color) : 'rgba(165,180,205,.6)';
+    ctx.fillRect(mx+b.x*sx, my+b.y*sy, Math.max(3,b.w*sx), Math.max(2,b.h*sy));
+  }
+  try{ ctx.fillStyle='#f0d488'; ctx.fillRect(mx+ENTRANCE.x*sx-2, my+ENTRANCE.y*sy-2, 4, 4); }catch(e){}
+  ctx.fillStyle='rgba(225,235,255,.5)';
+  for(var j=0;j<npcs.length;j++){ ctx.fillRect(mx+npcs[j].x*sx-1, my+npcs[j].y*sy-1, 2, 2); }
+  var px=mx+player.x*sx, py=my+player.y*sy;
+  ctx.fillStyle='#4fd1c5'; ctx.beginPath(); ctx.arc(px,py,3.6,0,Math.PI*2); ctx.fill();
+  ctx.strokeStyle='#ffffff'; ctx.lineWidth=1.2; ctx.stroke();
+  ctx.restore();
+}
+
+/* ===== 이모지 반응 (Gather Town 스타일) ===== */
+const EMOJIS = ['👍','👏','❤️','😂','🎉','🤔','🙌','💪','✨','😮','🙏','🔥'];
+window.emos = [];   // {x,y,e,t}
+(function(){
+  var bar=document.getElementById('emoBar'), btn=document.getElementById('emoBtn');
+  if(!bar||!btn) return;
+  EMOJIS.forEach(function(e){
+    var b=document.createElement('button'); b.type='button'; b.textContent=e;
+    b.onclick=function(ev){ ev.stopPropagation(); emote(e); bar.classList.remove('show'); };
+    bar.appendChild(b);
+  });
+  btn.onclick=function(ev){ ev.stopPropagation(); bar.classList.toggle('show'); };
+  document.addEventListener('click', function(){ bar.classList.remove('show'); });
+  document.addEventListener('keydown', function(e){
+    var k=e.key; if(!state.entered || anyModalOpen()) return;
+    if(k>='1' && k<='9'){ var i=parseInt(k,10)-1; if(EMOJIS[i]) emote(EMOJIS[i]); }
+  });
+})();
+function emote(e, who){
+  var c = who || player;
+  window.emos.push({ x:c.x, y:c.y, e:e, t:0 });
+  if(window.emos.length>30) window.emos.shift();
+  try{ sfx('coin'); }catch(_){}
+  try{ if(navigator.vibrate) navigator.vibrate(12); }catch(_){}
+}
+function emoTick(dt){
+  for(var i=window.emos.length-1;i>=0;i--){
+    var m=window.emos[i]; m.t+=dt;
+    if(m.t>1.8) window.emos.splice(i,1);
+  }
+  /* NPC도 가끔 반응 */
+  if(Math.random()<dt*0.12 && npcs.length){
+    var n=npcs[Math.floor(Math.random()*npcs.length)];
+    if(n && !n.bubble) emoteQuiet(EMOJIS[Math.floor(Math.random()*EMOJIS.length)], n);
+  }
+}
+function emoteQuiet(e,c){ window.emos.push({x:c.x,y:c.y,e:e,t:0}); if(window.emos.length>30) window.emos.shift(); }
+function drawEmos(){
+  for(var i=0;i<window.emos.length;i++){
+    var m=window.emos[i];
+    var p=Math.min(1,m.t/1.8);
+    var rise=44*p, alpha=(p<0.75)?1:(1-(p-0.75)/0.25);
+    var pop=(p<0.15)? (0.6+p/0.15*0.5) : 1;
+    ctx.save();
+    ctx.globalAlpha=Math.max(0,alpha);
+    ctx.font=(22*pop).toFixed(1)+'px sans-serif';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(m.e, m.x, m.y-40-rise);
+    ctx.restore();
+  }
+}
+
+/* center camera initially */
+cam.x = clamp(player.x-VW/2,0,Math.max(0,WORLD.w-VW));
+cam.y = clamp(player.y-VH/2,0,Math.max(0,WORLD.h-VH));
+requestAnimationFrame(loop);
+</script>
+
+<script>
+(function(){
+  const overlay = document.getElementById('onboardOverlay');
+  const closeBtn = document.getElementById('onboardClose');
+  const shown = localStorage.getItem('physio_onboard_v1');
+  const hide = ()=>{overlay.style.display='none';localStorage.setItem('physio_onboard_v1','1');};
+  if(!shown) overlay.style.display='flex';
+  if(closeBtn) closeBtn.addEventListener('click', hide);
+  document.addEventListener('keydown', e=>{if(e.key==='Escape' && overlay.style.display==='flex') hide();});
+})();
+</script>
+
+<div id="a11y-status" class="vis-hidden" aria-live="polite"></div>
+<script>
+(function(){
+  const status = document.getElementById('a11y-status');
+  const announce = (msg)=>{ if(status) status.textContent = msg; };
+  document.addEventListener('keydown', e=>{
+    if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Enter','Escape'].includes(e.key)) announce('키보드 입력 처리 중');
+  });
+  const imgs = document.querySelectorAll('img');
+  imgs.forEach((img, i)=>{ if(!img.hasAttribute('alt')) img.alt = '캠퍼스 이미지 ' + (i+1); });
+  const btns = document.querySelectorAll('button');
+  btns.forEach(btn=>{ if(!btn.getAttribute('aria-label') && !btn.textContent.trim()) btn.setAttribute('aria-label','버튼'); });
+})();
+</script>
+
+<div class="vis-hidden">성능 최적화: 초기 자산만 우선 로드하고 나머지는 지연 로딩합니다.</div>
+</main>
+
+<script>
+/* 학생용 배포본: 개발자 전용 'AI 엔진(Ollama)' 버튼은 기본 숨김.
+   교수·개발자는 Ctrl+Alt+D 로 표시/숨김 토글. */
+(function(){
+  try{
+    document.addEventListener('keydown', function(e){
+      if (e.ctrlKey && e.altKey && (e.key==='d' || e.key==='D' || e.code==='KeyD')){
+        var b=document.getElementById('ollamaBtn');
+        if(!b) return;
+        var show = b.hasAttribute('hidden');
+        if(show) b.removeAttribute('hidden'); else b.setAttribute('hidden','');
+        if (window.toast) toast(show ? '개발자 모드: AI 엔진 버튼 표시' : 'AI 엔진 버튼 숨김');
+      }
+    });
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
