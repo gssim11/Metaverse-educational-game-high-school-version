@@ -1075,7 +1075,7 @@ function openHub(){
   setDialog('📚','linear-gradient(135deg,#4a8f5a,#2a3550)','학생회관·도서관','자율 AI들의 휴식·잡담 공간');
   const body=document.getElementById('dlg-body'); const foot=document.getElementById('dlg-foot');
   const around = students.filter(s=>dist(s.x,s.y,player.x,player.y)<260).map(s=>s.name);
-  body.innerHTML='<div class="say"><span class="who">안내</span>여기는 AI 학생들이 쉬는 시간에 모여 잡담하는 곳입니다. 지금 근처 학생: <b>'+(around.length?around.join(', '):'없음')+'</b><br><br>가만히 관전하면 AI들이 스스로 대화하는 모습을 볼 수 있어요(👁️ 관전 모드 추천).</div>'+jobLink('📖 걷는 법을 배우는 시간 — 물리치료학과 성장소설','https://gssim11.github.io/PT-novel/',true)+jobLink('📰 학과뉴스','https://physi.ansan.ac.kr/physi/board/3',false)+jobLink('📷 포토갤러리','https://physi.ansan.ac.kr/physi/board/7',false);
+  body.innerHTML='<div class="say"><span class="who">안내</span>여기는 AI 학생들이 쉬는 시간에 모여 잡담하는 곳입니다. 지금 근처 학생: <b>'+(around.length?around.join(', '):'없음')+'</b><br><br>가만히 관전하면 AI들이 스스로 대화하는 모습을 볼 수 있어요(👁️ 관전 모드 추천).</div>'+jobLink('📖 걷는 법을 배우는 시간 — 물리치료학과 성장소설','https://pt-novel.vercel.app/',true)+jobLink('📰 학과뉴스','https://physi.ansan.ac.kr/physi/board/3',false)+jobLink('📷 포토갤러리','https://physi.ansan.ac.kr/physi/board/7',false);
   foot.innerHTML='';
   addFoot('👁️ 관전 모드 켜기', ()=>{ toggleSpectate(true); closeDialog(); });
   addFoot('닫기', closeDialog);
@@ -1732,7 +1732,7 @@ function openOffice(){
   body.innerHTML=
    '<div class="say"><span class="who">안내</span>수강·학적·증명·행정 문의는 학과사무실로 오세요. 친절한 조교 선생님들이 도와드립니다.</div>'+
    '<div class="say"><span class="who">👩‍💼 조교 선생님</span><b>정성예</b> 조교 · <b>김희연</b> 조교</div>'+
-   jobLink('🏫 물리치료학과 홈페이지 바로가기','https://physi.ansan.ac.kr/physi',false)+jobLink('💼 물리치료 채용공고 (PT-JOB)','https://pt-job.vercel.app/',false)+jobLink('📖 걷는 법을 배우는 시간 (물리치료학과 성장소설)','https://gssim11.github.io/PT-novel/',false)+'<div class="expl"><span class="tag">위치·연락</span>안산대학교 <b>성실관 205호</b> 물리치료학과 · Tel 031-363-6943 · Fax 031-363-7704</div>';
+   jobLink('🏫 물리치료학과 홈페이지 바로가기','https://physi.ansan.ac.kr/physi',false)+jobLink('💼 물리치료 채용공고 (PT-JOB)','https://pt-job.vercel.app/',false)+jobLink('📖 걷는 법을 배우는 시간 (물리치료학과 성장소설)','https://pt-novel.vercel.app/',false)+'<div class="expl"><span class="tag">위치·연락</span>안산대학교 <b>성실관 205호</b> 물리치료학과 · Tel 031-363-6943 · Fax 031-363-7704</div>';
   foot.innerHTML=''; addFoot('닫기', closeDialog, true); showDialog();
 }
 function openStaff(ref){
@@ -1776,7 +1776,7 @@ function openCareer(){
   h+=jobLink('🧭 자기를 이해하기 — Map of Me 열기','https://map-of-me.vercel.app/',true);
   h+=jobLink('🗺️ 진로·취업 로드맵','https://job.ansan.ac.kr/job/content/4',false);
   h+=jobLink('💼 물리치료사는 어디서 일할까? — PT-JOB 채용공고','https://pt-job.vercel.app/',true);
-  h+=jobLink('📖 물리치료학과 진로 탐색 소설 — 걷는 법을 배우는 시간','https://gssim11.github.io/PT-novel/',false);
+  h+=jobLink('📖 물리치료학과 진로 탐색 소설 — 걷는 법을 배우는 시간','https://pt-novel.vercel.app/',false);
   h+=jobLink('📢 채용정보·취업매칭','https://job.ansan.ac.kr/job/board/1',false);
   h+=jobLink('💬 진로·취업 상담 신청','https://aujob.ansan.ac.kr/aujob',false);
   h+=jobLink('🤖 AI 솔루션 (자기소개서·면접)','https://inface.ai/ansan',true);
@@ -1819,7 +1819,7 @@ function openWelcome(){
   h+=jobLink('📰 학과뉴스 · 포토갤러리','https://physi.ansan.ac.kr/physi/board/3',false);
   h+=jobLink('💼 대학일자리플러스센터 (진로·취업)','https://job.ansan.ac.kr/job',false);
   h+=jobLink('💼 졸업 후 진로 — 물리치료 채용공고 (PT-JOB)','https://pt-job.vercel.app/',false);
-  h+=jobLink('📖 걷는 법을 배우는 시간 — 물리치료학과 성장소설','https://gssim11.github.io/PT-novel/',false);
+  h+=jobLink('📖 걷는 법을 배우는 시간 — 물리치료학과 성장소설','https://pt-novel.vercel.app/',false);
   h+=jobLink('▶ 학과 홍보영상 (YouTube)','https://www.youtube.com/watch?v=i1GJbMdRMuE',false);
   h+=jobLink('🚁 안산대 캠퍼스 VR 항공뷰','https://www.ansan.ac.kr/site/resource/ansan/vrtour/tour.html',false);
   h+='<div class="expl"><span class="tag">문의</span>안산대학교 성실관 205호 물리치료학과 · Tel 031-363-6943</div>';
